@@ -1,0 +1,11 @@
+Question,OptionA,OptionB,OptionC,OptionD,Answer
+Which paradigm does Java follow?,Procedural,Object-Oriented,Functional,Logical,B
+Which of the following best describes a programming paradigm?,A specific programming language,A style or approach to programming,A software development tool,A computer hardware architecture,B
+"In the procedural programming paradigm, programs are organized around:",Objects and methods,Functions and procedures,Rules and facts,Events and listeners,B
+Which of the following is NOT an object-oriented programming concept?,Inheritance,Encapsulation,Polymorphism,Backtracking,D
+Which programming paradigm is primarily based on mathematical functions and avoids changing state?,Functional,Logic,Procedural,Event-driven,A
+Prolog is an example of which programming paradigm?,Object-Oriented,Procedural,Logic,Functional,C
+Which of the following paradigms supports recursion as a natural form of iteration?,Procedural,Object-Oriented,Functional,Logical,C
+Which of the following languages is MOST associated with functional programming?,Java,C,Haskell,Python,C
+Imperative programming is characterized by:,Using mathematical equations only,Describing facts and rules,Representing problems in terms of objects,Giving step-by-step instructions that change program state,D
+Event-driven programming is most commonly used in:,Operating system kernels,Web and GUI applications,Compiler design,Mathematical modeling,B
