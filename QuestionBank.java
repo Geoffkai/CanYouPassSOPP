@@ -32,7 +32,7 @@ public class QuestionBank {
                                 int correctIndex = Integer.parseInt(data[5].trim());
                                 String difficulty = data[6].trim();
 
-                                Question q = new Question("Procedural", question, choices, correctIndex, question);
+                                Question q = new Question("Procedural", question, choices, correctIndex, difficulty);
                                 activeQuestions.add(q);
                         }
                         System.out.println("[QuestionBank] Loaded " + activeQuestions.size() + " questions from "
