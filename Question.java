@@ -49,4 +49,8 @@ public class Question {
     public boolean isCorrect(int choice) {
         return correctChoice == choice;
     }
+
+    public int getCorrectChoice() {
+        return correctChoice;
+    }
 }

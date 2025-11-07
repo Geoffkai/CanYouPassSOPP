@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class GameManager {
     private QuestionBank questionBank;
+    private Classmate chosenClassmate;
     private Player player;
     private Question currentQuestion;
     private boolean debugUsed;
@@ -14,9 +15,10 @@ public class GameManager {
     private List<Question> availableQuestions;
     private String chosenTopic;
     private int currentQuestionIndex;
-    private Map<DebugTools, Integer> debugToolUsage;
+    private Map<String, Boolean> debugToolsUsage;
     private boolean isGameActive;
     private Record recordManager = new Record();
+    private DebugTools debugTools = new DebugTools();
     Scanner scanner = new Scanner(System.in);
 
     // Start Game
@@ -27,7 +29,7 @@ public class GameManager {
         this.debugUsed = false;
         this.isGameActive = false;
         this.availableQuestions = new ArrayList<>();
-        this.debugToolUsage = new HashMap<>();
+        this.debugToolsUsage = new HashMap<>();
         this.currentQuestion = null;
         startGame();
     }
@@ -184,4 +186,50 @@ public class GameManager {
     public boolean isGameActive() {
         return isGameActive;
     }
+
+    // START OF DEBUG TOOLS
+    public void initializeDebugTools() {
+        debugToolsUsage.put("Refactor", false);
+        debugToolsUsage.put("ConsoleLog", false);
+        debugToolsUsage.put("CtrlC", false);
+        debugToolsUsage.put("AutoDebug", false);
+    }
+
+    public void dispayDebugTools() {
+        System.out.println("\nAvailable Debug Tools:");
+        for (String tool : debugToolsUsage.keySet()) {
+            String status = debugToolsUsage.get(tool) ? "USED" : "AVAILABLE";
+            System.out.println("- " + tool + ": " + status);
+        }
+    }
+
+    public void useRefactor(int correctIndex) {
+        List<Integer> newChoices;
+        if (debugToolsUsage.get("Refactor")) {
+            System.out.println("Refactor tool has already been used.");
+            return;
+        }
+
+        newChoices = debugTools.refactor(correctIndex);
+
+        System.out.println("\n[Debug Tool - Refactor] Here are your two choices:");
+        for (int idx : newChoices) {
+            System.out.println((idx + 1) + ". " + currentQuestion.getOptions()[idx]);
+        }
+
+        debugToolsUsage.put("Refactor", true);
+    }
+
+    // public void useConsoleLog(Question question) {
+    // if (debugToolsUsage.get("ConsoleLog")) {
+    // System.out.println("Console Log tool has already been used.");
+    // return;
+    // }
+
+    // int classmateAnswer =
+    // debugTools.consoleLog(question)(currentQuestion.getCorrectChoice());
+    // debugTools.consoleLog(question);
+    // debugToolsUsage.put("ConsoleLog", true);
+    // }
+
 }
