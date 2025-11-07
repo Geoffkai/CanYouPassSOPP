@@ -11,7 +11,7 @@ public class GameManager {
     private Question currentQuestion;
     private boolean debugUsed;
     private QuestionBank.Category chosenCategory;
-    private List<Question> questionStore;
+    private List<Question> availableQuestions;
     private String chosenTopic;
     private int currentQuestionIndex;
     private Map<DebugTools, Integer> debugToolUsage;
@@ -19,13 +19,14 @@ public class GameManager {
     private Record recordManager = new Record();
     Scanner scanner = new Scanner(System.in);
 
+    // Start Game
     public GameManager(QuestionBank questionBank, Player currentPlayer) {
         this.questionBank = (questionBank != null) ? questionBank : new QuestionBank();
         this.player = currentPlayer;
         this.currentQuestionIndex = 0;
         this.debugUsed = false;
         this.isGameActive = false;
-        this.questionStore = new ArrayList<>();
+        this.availableQuestions = new ArrayList<>();
         this.debugToolUsage = new HashMap<>();
         this.currentQuestion = null;
         startGame();
@@ -34,25 +35,23 @@ public class GameManager {
     public void startGame() {
         System.out.println("[GameManager] Starting game...");
         isGameActive = true;
+
         chooseCategory();
-        getQuestions();
+        loadQuestions();
         gameLoop();
     }
 
+    // Choose category (theoretical/programming)
     public QuestionBank.Category chooseCategory() {
-        System.out.println("[GameManager] Choosing category...");
+        System.out.println("\nChoose a category:");
         System.out.println("1. Theoretical");
         System.out.println("2. Programming");
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        if (choice == 1) {
-            chosenCategory = QuestionBank.Category.Theoretical;
-            questionBank.loadCategory(QuestionBank.Category.Theoretical);
-        } else if (choice == 2) {
-            chosenCategory = QuestionBank.Category.Programming;
-            questionBank.loadCategory(QuestionBank.Category.Programming);
-        }
+        chosenCategory = (choice == 1) ? QuestionBank.Category.Theoretical : QuestionBank.Category.Programming;
+        questionBank.loadCategory(chosenCategory);
+
         return chosenCategory;
     }
 
@@ -60,17 +59,45 @@ public class GameManager {
         return null;
     }
 
-    public void getQuestions() {
-        questionStore.clear();
+    // Load 10 questions from each level L1-L5
+    public void loadQuestions() {
+        availableQuestions.clear();
         for (int i = 1; i <= 5; i++) {
             List<Question> levelQuestions = questionBank.getQuestionsByLevel("L" + i, 2);
-            questionStore.addAll(levelQuestions);
+            availableQuestions.addAll(levelQuestions);
         }
-        System.out.println("[GameManager] Loaded " + questionStore.size() + " questions into the game.");
+        System.out.println("[GameManager] Loaded " + availableQuestions.size() + " questions into the game.");
+
     }
 
-    public Question pickTopicandLevel(String topic, String difficulty) {
-        for (Question q : questionStore) {
+    // Show all remaining questions
+    private void displayAvailableQuestions() {
+        System.out.println("\nAvailable Questions:");
+
+        for (int i = 0; i < availableQuestions.size(); i++) {
+            Question q = availableQuestions.get(i);
+            System.out.println((i + 1) + ". " + q.getDifficulty() + " - " + q.getTopic());
+        }
+
+    }
+
+    public int chooseQuestion() {
+        System.out.println("Choose a topic from the above list: (0 to quit)");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        if (choice == 0) {
+            endGame();
+        }
+        if (choice < 1 || choice >= availableQuestions.size()) {
+            System.out.println("Invalid choice. Please try again.");
+        }
+
+        return choice;
+    }
+
+    public Question getQuestionByTopicByTopic(String topic, String difficulty) {
+        for (Question q : availableQuestions) {
             if (q.getTopic().equals(topic)) {
                 return q;
             }
@@ -79,16 +106,20 @@ public class GameManager {
     }
 
     public void gameLoop() {
-        while (isGameActive && currentQuestionIndex < questionStore.size()) {
-            currentQuestion = questionStore.get(currentQuestionIndex);
+        while (isGameActive && currentQuestionIndex < availableQuestions.size()) {
+            displayAvailableQuestions();
+            currentQuestion = availableQuestions.get(chooseQuestion() - 1);
             presentQuestion(currentQuestion);
-            currentQuestionIndex++;
+            availableQuestions.remove(currentQuestion);
         }
         endGame();
     }
 
+    // Present question to player
     public void presentQuestion(Question question) {
-        System.out.println("\n[Level " + question.getDifficulty() + "] " + question.getQuestionText());
+        System.out.println("\n[" + question.getDifficulty() + " - " + question.getTopic() + "]");
+        System.out.println(question.getQuestionText());
+
         String[] options = question.getOptions();
         for (int i = 0; i < options.length; i++) {
             System.out.println((i + 1) + ". " + options[i]);
@@ -108,6 +139,11 @@ public class GameManager {
     }
 
     public boolean submitAnswer(int choiceIndex) {
+        if (currentQuestion == null) {
+            System.out.println("No current question to answer.");
+            return false;
+        }
+
         boolean correct = currentQuestion.isCorrect(choiceIndex);
         int points = currentQuestion.getDifficultyPoints();
 
@@ -119,6 +155,8 @@ public class GameManager {
             player.deductScore(points);
             System.out.println("Wrong! -" + points + " pts");
         }
+
+        System.out.println("Current Score: " + player.getScore());
         return correct;
     }
 
@@ -129,5 +167,21 @@ public class GameManager {
         System.out.println("Final Score: " + player.getScore());
         System.out.println("Correct Answers: " + player.getCorrectCount());
         // recordManager.saveRecord(player);
+    }
+
+    // For Future GUI Use
+    public Question getQuestionByIndex(int index) {
+        if (index >= 0 && index < availableQuestions.size()) {
+            return availableQuestions.get(index);
+        }
+        return null;
+    }
+
+    public List<Question> getAvailableQuestions() {
+        return availableQuestions;
+    }
+
+    public boolean isGameActive() {
+        return isGameActive;
     }
 }
