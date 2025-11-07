@@ -15,9 +15,9 @@ public class QuestionBank {
         public void loadCategory(Category category) {
                 activeQuestions.clear();
 
-                String fileName = (category == Category.Programming)
-                                ? "Users/LENOVO/OneDrive/Dokumen/2nd 1st/CMSC 13/Machine Problem Files/programming_paradigms_questions.csv"
-                                : "Users/LENOVO/OneDrive/Dokumen/2nd 1st/CMSC 13/Machine Problem Files/theoretical_questions.csv";
+                String fileName = (category == Category.Theoretical)
+                                ? "C:/Users/LENOVO/OneDrive/Dokumen/2nd 1st/CMSC 13/Machine Problem Files/theoretical_questions.csv"
+                                : "C:/Users/LENOVO/OneDrive/Dokumen/2nd 1st/CMSC 13/Machine Problem Files/programming_questions.csv";
 
                 try (
 
