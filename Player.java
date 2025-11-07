@@ -29,7 +29,7 @@ public class Player {
         return correctCount;
     }
 
-    public void incrementCount() {
+    public void incrementCorrect() {
         correctCount++;
     }
 }

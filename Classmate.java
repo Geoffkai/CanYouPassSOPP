@@ -1,3 +1,3 @@
-public interface AssistCoder {
+public interface Classmate {
 
 }
