@@ -19,11 +19,22 @@ public abstract class Classmate {
         return specialty;
     }
 
-    public boolean willAnswerCorrectly(String questionTopic) {
-        if (questionTopic.equalsIgnoreCase(this.specialty)) {
-            return true;
+    public int chooseAnswerIndex(Question question) {
+        if (question.getTopic().equalsIgnoreCase(specialty)) {
+            return question.getCorrectChoice();
         } else {
-            return rand.nextDouble() < OTHER_TOPIC_ACCURACY;
+            // gives a random number between 0.0 and 1.0
+            // basically 25% chance to answer correctly if not specialty
+            if (rand.nextDouble() <= 0.25) {
+                return question.getCorrectChoice();
+            } else {
+                // choose a wrong answer
+                int wrongIndex;
+                do {
+                    wrongIndex = rand.nextInt(question.getOptions().length);
+                } while (wrongIndex == question.getCorrectChoice());
+                return wrongIndex;
+            }
         }
     };
 }

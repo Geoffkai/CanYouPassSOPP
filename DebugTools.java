@@ -24,17 +24,25 @@ public class DebugTools {
         return correctIndices;
     }
 
-    public void consoleLog(Question question) {
-        Classmate classmate = new Classmate();
-        System.out.println("\n[Debug Tool - Console Log] Here's a hint from your classmate:");
-        System.out.println(classmate.answer);
+    public void consoleLog(Classmate classmate, Question question) {
+        int chosenIndex = classmate.chooseAnswerIndex(question);
+        String chosenAnswer = question.getOptions()[chosenIndex];
+
+        System.out.println("You used Console Log!" + classmate.getName() + " thinks the answer is: " + chosenAnswer);
     }
 
-    public boolean ctrlC(boolean playerAnswer, boolean classmateCorrect) {
-        if (!playerAnswer && classmateCorrect) {
-            System.out.println("[Ctrl+C] You were saved!");
-            return true;
+    public boolean ctrlC(Classmate classmate, Question question) {
+        int chosenIndex = classmate.chooseAnswerIndex(question);
+        String chosenAnswer = question.getOptions()[chosenIndex];
+
+        System.out.println(classmate.getName() + " suggests you choose: " + chosenAnswer);
+
+        boolean isCorrect = (chosenIndex == question.getCorrectChoice());
+        if (isCorrect) {
+            System.out.println("That’s correct! You copied the right answer!");
+        } else {
+            System.out.println("Uh oh... " + classmate.getName() + " got it wrong.");
         }
-        return playerAnswer;
+        return isCorrect;
     }
 }

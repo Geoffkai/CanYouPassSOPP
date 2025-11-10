@@ -220,11 +220,11 @@ public class GameManager {
         debugToolsUsage.put("Refactor", true);
     }
 
-    // public void useConsoleLog(Question question) {
-    // if (debugToolsUsage.get("ConsoleLog")) {
-    // System.out.println("Console Log tool has already been used.");
-    // return;
-    // }
+    public void useConsoleLog(Question question) {
+    if (debugToolsUsage.get("ConsoleLog")) {
+    System.out.println("Console Log tool has already been used.");
+    return;
+    }
 
     // int classmateAnswer =
     // debugTools.consoleLog(question)(currentQuestion.getCorrectChoice());
