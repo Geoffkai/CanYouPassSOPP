@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class GameManager {
     private QuestionBank questionBank;
-    private Classmate chosenClassmate;
+    private Classmate selectedClassmate;
     private Player player;
     private Question currentQuestion;
     private boolean debugUsed;
