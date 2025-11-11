@@ -226,10 +226,4 @@ public class GameManager {
     return;
     }
 
-    // int classmateAnswer =
-    // debugTools.consoleLog(question)(currentQuestion.getCorrectChoice());
-    // debugTools.consoleLog(question);
-    // debugToolsUsage.put("ConsoleLog", true);
-    // }
-
 }
