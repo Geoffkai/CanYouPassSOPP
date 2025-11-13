@@ -221,9 +221,31 @@ public class GameManager {
     }
 
     public void useConsoleLog(Question question) {
-    if (debugToolsUsage.get("ConsoleLog")) {
-    System.out.println("Console Log tool has already been used.");
-    return;
+        if (debugToolsUsage.get("ConsoleLog")) {
+            System.out.println("Console Log tool has already been used.");
+            return;
+        }
+
+        if (selectedClassmate == null) {
+            System.out.println("No classmate selected for Console Log.");
+            return;
+        }
+
+        debugTools.consoleLog(selectedClassmate, question);
+        debugToolsUsage.put("ConsoleLog", true);
     }
 
+    public void useCtrlC(Question question) {
+        if (debugToolsUsage.get("CtrlC")) {
+            System.out.println("Ctrl C tool has already been used.");
+            return;
+        }
+
+        if (selectedClassmate == null) {
+            System.out.println("No classmate selected for Ctrl C.");
+            return;
+        }
+
+        boolean correct = debugTools.ctrlC(selectedClassmate, question);
+    }
 }
