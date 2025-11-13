@@ -1,9 +1,11 @@
 package src;
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameScreen extends JPanel {
-    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/GameScreen.png");
+    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/InitialImages/GameScreen.png");
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     //Choices image
@@ -36,8 +38,11 @@ public class GameScreen extends JPanel {
     ImageIcon Mute = new ImageIcon(new ImageIcon("src/img/Buttons/Mute.png").getImage().getScaledInstance(93, 93, java.awt.Image.SCALE_SMOOTH));
     JButton MuteBtn = new JButton(Mute);
 
-    JPanel character = new JPanel();
-
+    //Image for Characters and Levels
+    private final Map<String, ImageIcon> characters = new HashMap<>();
+    private final Map<String, ImageIcon> levels = new HashMap<>();
+    JLabel character = new JLabel();
+    JLabel labels = new JLabel();
 
     public GameScreen() {
         setLayout(null);
@@ -60,10 +65,21 @@ public class GameScreen extends JPanel {
 
         //Other Buttons
         RetryBtn.setBounds(44, 64, 93, 93);
+        RetryBtn.addActionListener(e -> {
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            topFrame.setContentPane(new PlayPanel());
+            topFrame.validate();
+            topFrame.repaint();
+            topFrame.setVisible(true);
+        });
+
         MenuBtn.setBounds(172, 64, 93, 93);
         MuteBtn.setBounds(300, 64, 93, 93);
 
-        display();
+        loadCharacters();
+        loadLevels();
+        displayLevel();
+        displayCharacter();
 
         add(Abtn);
         add(Bbtn);
@@ -78,14 +94,69 @@ public class GameScreen extends JPanel {
         add(MenuBtn);
         add(MuteBtn);
         add(character);
+        add(labels);
         add(backgroundPanel);
         validate();
         repaint();
     }
 
-    public void display() {
-        //Character Display
+    public void loadCharacters() {
+        characters.put("Geoff", new ImageIcon(new ImageIcon("src/img/Character/Geoff.png").getImage().getScaledInstance(411, 426, Image.SCALE_SMOOTH)));
+        characters.put("Yvonne", new ImageIcon(new ImageIcon("src/img/Character/Yvonne.png").getImage().getScaledInstance(411, 426, Image.SCALE_SMOOTH)));
+        characters.put("Anon",   new ImageIcon(new ImageIcon("src/img/Character/Anon.png").getImage().getScaledInstance(411, 426, Image.SCALE_SMOOTH)));
+        characters.put("Elmer",  new ImageIcon(new ImageIcon("src/img/Character/Elmer.png").getImage().getScaledInstance(411, 426, Image.SCALE_SMOOTH)));
+        characters.put("Merry",  new ImageIcon(new ImageIcon("src/img/Character/Merry.png").getImage().getScaledInstance(411, 426, Image.SCALE_SMOOTH)));
+    }
+
+    public void displayCharacter() {
         character.setBounds(1501, 213, 411, 426);
         character.setOpaque(true);
+
+        ImageIcon icon = characters.get(GameState.getCharacter());
+        character.setIcon(icon);
+    }
+
+    public void loadLevels() {
+        levels.put("Prod5", new ImageIcon(new ImageIcon("src/img/topics/Prod5.png")
+                .getImage().getScaledInstance(746, 93, Image.SCALE_SMOOTH)));
+
+        levels.put("Func5", new ImageIcon(new ImageIcon("src/img/topics/Func5.png")
+                .getImage().getScaledInstance(746, 93, Image.SCALE_SMOOTH)));
+
+        levels.put("OOP4", new ImageIcon(new ImageIcon("src/img/topics/OOP4.png")
+                .getImage().getScaledInstance(746, 93, Image.SCALE_SMOOTH)));
+
+        levels.put("Imp4", new ImageIcon(new ImageIcon("src/img/topics/Imp4.png")
+                .getImage().getScaledInstance(746, 93, Image.SCALE_SMOOTH)));
+
+        levels.put("Imp3", new ImageIcon(new ImageIcon("src/img/topics/Imp3.png")
+                .getImage().getScaledInstance(746, 93, Image.SCALE_SMOOTH)));
+
+        levels.put("Dec3", new ImageIcon(new ImageIcon("src/img/topics/Dec3.png")
+                .getImage().getScaledInstance(746, 93, Image.SCALE_SMOOTH)));
+
+        levels.put("Evdr2", new ImageIcon(new ImageIcon("src/img/topics/Evdr2.png")
+                .getImage().getScaledInstance(746, 93, Image.SCALE_SMOOTH)));
+
+        levels.put("OOP2", new ImageIcon(new ImageIcon("src/img/topics/OOP2.png")
+                .getImage().getScaledInstance(746, 93, Image.SCALE_SMOOTH)));
+
+        levels.put("Prod1", new ImageIcon(new ImageIcon("src/img/topics/Prod1.png")
+                .getImage().getScaledInstance(746, 93, Image.SCALE_SMOOTH)));
+
+        levels.put("Func1", new ImageIcon(new ImageIcon("src/img/topics/Func1.png")
+                .getImage().getScaledInstance(746, 93, Image.SCALE_SMOOTH)));
+    }
+
+    public void displayLevel() {
+        labels.setBounds(556, 64, 746, 87);
+        labels.setOpaque(true);
+
+        ImageIcon levelIcon = levels.get(GameState.getLevel());
+        if (levelIcon != null) {
+            labels.setIcon(levelIcon);
+        } else {
+            labels.setIcon(null);
+        }
     }
 }

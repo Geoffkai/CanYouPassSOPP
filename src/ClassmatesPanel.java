@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ClassmatesPanel extends JPanel {
-    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/ClassmatePanel.png");
+    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/InitialImages/ClassmatePanel.png");
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     public ClassmatesPanel() {

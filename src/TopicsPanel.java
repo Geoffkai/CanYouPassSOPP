@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TopicsPanel extends JPanel {
-    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/Topics.png");
+    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/InitialImages/Topics.png");
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     ImageIcon Prod5 = new ImageIcon(new ImageIcon("src/img/topics/Prod5.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));

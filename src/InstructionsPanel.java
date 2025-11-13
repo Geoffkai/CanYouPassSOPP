@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class InstructionsPanel extends JPanel {
-    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/Instructions.png");
+    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/InitialImages/Instructions.png");
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     public InstructionsPanel() {

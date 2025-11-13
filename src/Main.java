@@ -13,7 +13,7 @@ public class Main {
         frame.setSize(screenSize.width, screenSize.height);
 
         // Background panel
-        BackgroundPanel splashScreen = new BackgroundPanel("src/img/Splash.png");
+        BackgroundPanel splashScreen = new BackgroundPanel("src/img/InitialImages/Splash.png");
         splashScreen.setBounds(0, 0, screenSize.width, screenSize.height);
         splashScreen.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override

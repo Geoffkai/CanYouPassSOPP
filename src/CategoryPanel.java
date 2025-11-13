@@ -5,15 +5,15 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 public class CategoryPanel extends JPanel {
-    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/Category.png");
+    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/InitialImages/Category.png");
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     JTextField usernameField = new JTextField("ENTER YOUR USERNAME...");
 
     ImageIcon selectIcon = new ImageIcon(
-            new ImageIcon("src/img/Select.png").getImage().getScaledInstance(382, 93, Image.SCALE_SMOOTH)
+            new ImageIcon("src/img/InitialImages/Select.png").getImage().getScaledInstance(382, 93, Image.SCALE_SMOOTH)
     );
     ImageIcon selectActiveIcon = new ImageIcon(
-            new ImageIcon("src/img/Selected.png").getImage().getScaledInstance(382, 93, Image.SCALE_SMOOTH)
+            new ImageIcon("src/img/InitialImages/Selected.png").getImage().getScaledInstance(382, 93, Image.SCALE_SMOOTH)
     );
 
     final JButton[] activeButton = {null};

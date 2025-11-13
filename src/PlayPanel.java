@@ -5,7 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class PlayPanel extends JPanel {
-    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/ClickableClassmates.png");
+    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/InitialImages/ClickableClassmates.png");
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     public PlayPanel() {
