@@ -43,6 +43,7 @@ public class GameScreen extends JPanel {
     private final Map<String, ImageIcon> levels = new HashMap<>();
     JLabel character = new JLabel();
     JLabel labels = new JLabel();
+    JLabel score = new JLabel();
 
     public GameScreen() {
         setLayout(null);
@@ -50,36 +51,14 @@ public class GameScreen extends JPanel {
         backgroundPanel.setBounds(0, 0, screenSize.width, screenSize.height);
         backgroundPanel.setLayout(null);
 
-        //Choices Buttons
-        Abtn.setBounds(137, 859, 591, 84);
-        Bbtn.setBounds(774, 859, 591, 84);
-        Cbtn.setBounds(137, 960, 591, 84);
-        Dbtn.setBounds(774, 960, 591, 84);
-
-        //Debug Tools
-        Refactor.setBounds(1531, 671, 324, 50);
-        Console.setBounds(1531, 745, 324, 50);
-        CtrlC.setBounds(1531, 818, 324, 50);
-        AutoDebug.setBounds(1531, 892, 324, 50);
-        Return.setBounds(1531, 966, 324, 50);
-
-        //Other Buttons
-        RetryBtn.setBounds(44, 64, 93, 93);
-        RetryBtn.addActionListener(e -> {
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            topFrame.setContentPane(new PlayPanel());
-            topFrame.validate();
-            topFrame.repaint();
-            topFrame.setVisible(true);
-        });
-
-        MenuBtn.setBounds(172, 64, 93, 93);
-        MuteBtn.setBounds(300, 64, 93, 93);
-
+        displayChoiceButtons();
+        displayDebugTools();
+        displayTopButtons();
         loadCharacters();
         loadLevels();
         displayLevel();
         displayCharacter();
+        displayScore();
 
         add(Abtn);
         add(Bbtn);
@@ -95,9 +74,57 @@ public class GameScreen extends JPanel {
         add(MuteBtn);
         add(character);
         add(labels);
+        add(score);
         add(backgroundPanel);
         validate();
         repaint();
+    }
+
+    public void displayChoiceButtons(){
+        //Choices Buttons
+        Abtn.setBounds(137, 859, 591, 84);
+        Abtn.addActionListener(e -> {
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            topFrame.setContentPane(new ScorePanels());
+            topFrame.validate();
+            topFrame.repaint();
+            topFrame.setVisible(true);
+        });
+
+        Bbtn.setBounds(774, 859, 591, 84);
+        Cbtn.setBounds(137, 960, 591, 84);
+        Dbtn.setBounds(774, 960, 591, 84);
+    }
+
+    public void displayDebugTools() {
+        //Debug Tools
+        Refactor.setBounds(1531, 671, 324, 50);
+        Console.setBounds(1531, 745, 324, 50);
+        CtrlC.setBounds(1531, 818, 324, 50);
+        AutoDebug.setBounds(1531, 892, 324, 50);
+        Return.setBounds(1531, 966, 324, 50);
+    }
+
+    public void displayTopButtons(){
+        //Other Buttons
+        RetryBtn.setBounds(44, 64, 93, 93);
+        RetryBtn.addActionListener(e -> {
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            topFrame.setContentPane(new PlayPanel());
+            topFrame.validate();
+            topFrame.repaint();
+            topFrame.setVisible(true);
+        });
+
+        MenuBtn.setBounds(172, 64, 93, 93);
+        MenuBtn.addActionListener(e -> {
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            topFrame.setContentPane(new Menu());
+            topFrame.validate();
+            topFrame.repaint();
+            topFrame.setVisible(true);
+        });
+        MuteBtn.setBounds(300, 64, 93, 93);
     }
 
     public void loadCharacters() {
@@ -158,5 +185,13 @@ public class GameScreen extends JPanel {
         } else {
             labels.setIcon(null);
         }
+    }
+
+    public void displayScore(){
+        score.setText("SCORE: 1000"); // add nalang score getter dito jop
+        score.setBounds(1460, 80, 422, 65);
+        score.setFont(new Font("Arial", Font.BOLD, 50));
+        score.setForeground(Color.WHITE);
+        score.setHorizontalAlignment(SwingConstants.CENTER);
     }
 }

@@ -36,6 +36,8 @@ public class TopicsPanel extends JPanel {
     ImageIcon Func1 = new ImageIcon(new ImageIcon("src/img/topics/Func1.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
     JButton Func1btn = new JButton(Func1);
 
+    ImageIcon Done = new ImageIcon(new ImageIcon("src/img/topics/Done.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+
     public TopicsPanel() {
         setLayout(null);
         setBounds(0, 0, screenSize.width, screenSize.height);
@@ -45,6 +47,7 @@ public class TopicsPanel extends JPanel {
         Prod5btn.setBounds(151, 275, 746, 93);
         Prod5btn.addActionListener(e -> {
             GameState.setLevel("Prod5");
+            GameState.markCompleted("Prod5");
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();
@@ -54,7 +57,8 @@ public class TopicsPanel extends JPanel {
         Func5btn.setBounds(1022, 275, 746, 93);
         Func5btn.addActionListener(e -> {
             GameState.setLevel("Func5");
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
+            GameState.markCompleted("Func5");
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Func5btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();
             topFrame.repaint();
@@ -63,7 +67,8 @@ public class TopicsPanel extends JPanel {
         OOP4btn.setBounds(151, 427, 746, 93);
         OOP4btn.addActionListener(e -> {
             GameState.setLevel("OOP4");
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
+            GameState.markCompleted("OOP4");
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(OOP4btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();
             topFrame.repaint();
@@ -71,8 +76,9 @@ public class TopicsPanel extends JPanel {
 
         Imp4btn.setBounds(1022, 427, 746, 93);
         Imp4btn.addActionListener(e -> {
-           GameState.setLevel("Imp4");
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
+            GameState.setLevel("Imp4");
+            GameState.markCompleted("Imp4");
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Imp4btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();
             topFrame.repaint();
@@ -81,7 +87,8 @@ public class TopicsPanel extends JPanel {
         Imp3btn.setBounds(151, 577, 746, 93);
         Imp3btn.addActionListener(e -> {
             GameState.setLevel("Imp3");
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
+            GameState.markCompleted("Imp3");
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Imp3btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();
             topFrame.repaint();
@@ -90,7 +97,8 @@ public class TopicsPanel extends JPanel {
         Dec3btn.setBounds(1022, 577, 746, 93);
         Dec3btn.addActionListener(e -> {
             GameState.setLevel("Dec3");
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
+            GameState.markCompleted("Dec3");
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Dec3btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();
             topFrame.repaint();
@@ -99,7 +107,8 @@ public class TopicsPanel extends JPanel {
         Evdr2btn.setBounds(151, 727, 746, 93);
         Evdr2btn.addActionListener(e -> {
             GameState.setLevel("Evdr2");
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
+            GameState.markCompleted("Evdr2");
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Evdr2btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();
             topFrame.repaint();
@@ -108,7 +117,8 @@ public class TopicsPanel extends JPanel {
         OOP2btn.setBounds(1022, 727, 746, 93);
         OOP2btn.addActionListener(e -> {
             GameState.setLevel("OOP2");
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
+            GameState.markCompleted("OOP2");
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(OOP2btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();
             topFrame.repaint();
@@ -117,7 +127,8 @@ public class TopicsPanel extends JPanel {
         Prod1btn.setBounds(151, 877, 746, 93);
         Prod1btn.addActionListener(e -> {
             GameState.setLevel("Prod1");
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
+            GameState.markCompleted("Prod1");
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod1btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();
             topFrame.repaint();
@@ -126,7 +137,8 @@ public class TopicsPanel extends JPanel {
         Func1btn.setBounds(1022, 877, 746, 93);
         Func1btn.addActionListener(e -> {
             GameState.setLevel("Func1");
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
+            GameState.markCompleted("Func1");
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Func1btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();
             topFrame.repaint();
@@ -143,7 +155,21 @@ public class TopicsPanel extends JPanel {
         add(Prod1btn);
         add(Func1btn);
         add(backgroundPanel);
+        updateButtonStates();
         validate();
         repaint();
+    }
+
+    private void updateButtonStates() {
+        if (GameState.isCompleted("Prod5")) { Prod5btn.setEnabled(false); Prod5btn.setIcon(Done); }
+        if (GameState.isCompleted("Func5")) { Func5btn.setEnabled(false); Func5btn.setIcon(Done); }
+        if (GameState.isCompleted("OOP4")) { OOP4btn.setEnabled(false); OOP4btn.setIcon(Done); }
+        if (GameState.isCompleted("Imp4")) { Imp4btn.setEnabled(false); Imp4btn.setIcon(Done); }
+        if (GameState.isCompleted("Imp3")) { Imp3btn.setEnabled(false); Imp3btn.setIcon(Done); }
+        if (GameState.isCompleted("Dec3")) { Dec3btn.setEnabled(false); Dec3btn.setIcon(Done); }
+        if (GameState.isCompleted("Evdr2")) { Evdr2btn.setEnabled(false); Evdr2btn.setIcon(Done); }
+        if (GameState.isCompleted("OOP2")) { OOP2btn.setEnabled(false); OOP2btn.setIcon(Done); }
+        if (GameState.isCompleted("Prod1")) { Prod1btn.setEnabled(false); Prod1btn.setIcon(Done); }
+        if (GameState.isCompleted("Func1")) { Func1btn.setEnabled(false); Func1btn.setIcon(Done); }
     }
 }
