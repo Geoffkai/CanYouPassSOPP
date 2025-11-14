@@ -1,9 +1,7 @@
 package src;
-import javax.imageio.ImageIO;
-import javax.swing.*;
+
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import javax.swing.*;
 
 public class BackgroundPanel extends JPanel {
     private Image background;
@@ -20,7 +18,6 @@ public class BackgroundPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
 
         if (background != null) {
             // Maintain aspect ratio, scale to fit the screen

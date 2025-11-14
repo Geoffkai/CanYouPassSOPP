@@ -1,39 +1,50 @@
 package src;
-import javax.swing.*;
+
 import java.awt.*;
+import javax.swing.*;
 
 public class TopicsPanel extends JPanel {
     BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/Topics.png");
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    ImageIcon Prod5 = new ImageIcon(new ImageIcon("src/img/topics/Prod5.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon Prod5 = new ImageIcon(new ImageIcon("src/img/topics/Prod5.png").getImage().getScaledInstance(746, 93,
+            java.awt.Image.SCALE_SMOOTH));
     JButton Prod5btn = new JButton(Prod5);
 
-    ImageIcon Func5 = new ImageIcon(new ImageIcon("src/img/topics/Func5.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon Func5 = new ImageIcon(new ImageIcon("src/img/topics/Func5.png").getImage().getScaledInstance(746, 93,
+            java.awt.Image.SCALE_SMOOTH));
     JButton Func5btn = new JButton(Func5);
 
-    ImageIcon OOP4 = new ImageIcon(new ImageIcon("src/img/topics/OOP4.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon OOP4 = new ImageIcon(new ImageIcon("src/img/topics/OOP4.png").getImage().getScaledInstance(746, 93,
+            java.awt.Image.SCALE_SMOOTH));
     JButton OOP4btn = new JButton(OOP4);
 
-    ImageIcon Imp4 = new ImageIcon(new ImageIcon("src/img/topics/Imp4.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon Imp4 = new ImageIcon(new ImageIcon("src/img/topics/Imp4.png").getImage().getScaledInstance(746, 93,
+            java.awt.Image.SCALE_SMOOTH));
     JButton Imp4btn = new JButton(Imp4);
 
-    ImageIcon Imp3 = new ImageIcon(new ImageIcon("src/img/topics/Imp3.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon Imp3 = new ImageIcon(new ImageIcon("src/img/topics/Imp3.png").getImage().getScaledInstance(746, 93,
+            java.awt.Image.SCALE_SMOOTH));
     JButton Imp3btn = new JButton(Imp3);
 
-    ImageIcon Dec3 = new ImageIcon(new ImageIcon("src/img/topics/Dec3.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon Dec3 = new ImageIcon(new ImageIcon("src/img/topics/Dec3.png").getImage().getScaledInstance(746, 93,
+            java.awt.Image.SCALE_SMOOTH));
     JButton Dec3btn = new JButton(Dec3);
 
-    ImageIcon Evdr2 = new ImageIcon(new ImageIcon("src/img/topics/Evdr2.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon Evdr2 = new ImageIcon(new ImageIcon("src/img/topics/Evdr2.png").getImage().getScaledInstance(746, 93,
+            java.awt.Image.SCALE_SMOOTH));
     JButton Evdr2btn = new JButton(Evdr2);
 
-    ImageIcon OOP2 = new ImageIcon(new ImageIcon("src/img/topics/OOP2.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon OOP2 = new ImageIcon(new ImageIcon("src/img/topics/OOP2.png").getImage().getScaledInstance(746, 93,
+            java.awt.Image.SCALE_SMOOTH));
     JButton OOP2btn = new JButton(OOP2);
 
-    ImageIcon Prod1 = new ImageIcon(new ImageIcon("src/img/topics/Prod1.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon Prod1 = new ImageIcon(new ImageIcon("src/img/topics/Prod1.png").getImage().getScaledInstance(746, 93,
+            java.awt.Image.SCALE_SMOOTH));
     JButton Prod1btn = new JButton(Prod1);
 
-    ImageIcon Func1 = new ImageIcon(new ImageIcon("src/img/topics/Func1.png").getImage().getScaledInstance(746, 93, java.awt.Image.SCALE_SMOOTH));
+    ImageIcon Func1 = new ImageIcon(new ImageIcon("src/img/topics/Func1.png").getImage().getScaledInstance(746, 93,
+            java.awt.Image.SCALE_SMOOTH));
     JButton Func1btn = new JButton(Func1);
 
     public TopicsPanel() {
@@ -71,7 +82,7 @@ public class TopicsPanel extends JPanel {
 
         Imp4btn.setBounds(1022, 427, 746, 93);
         Imp4btn.addActionListener(e -> {
-           GameState.setLevel("Imp4");
+            GameState.setLevel("Imp4");
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Prod5btn);
             topFrame.setContentPane(new GameScreen());
             topFrame.validate();

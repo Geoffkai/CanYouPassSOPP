@@ -1,7 +1,7 @@
 package src;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,7 +14,8 @@ public class Main {
         frame.setSize(screenSize.width, screenSize.height);
 
         // Background panel
-        BackgroundPanel splashScreen = new BackgroundPanel("src/img/Splash.png");
+        BackgroundPanel splashScreen = new BackgroundPanel(
+                "C://Users//LENOVO//OneDrive//Dokumen//2nd 1st//CMSC 13//Machine Problem Files//src//img//Splash.png");
         splashScreen.setBounds(0, 0, screenSize.width, screenSize.height);
         splashScreen.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -37,7 +38,6 @@ public class Main {
         exitButton.setBounds(screenSize.width - 60, 20, 50, 50); // position top-right
         exitButton.addActionListener(e -> System.exit(0));
         frame.add(exitButton);
-
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
