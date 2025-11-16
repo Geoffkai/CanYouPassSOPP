@@ -1,14 +1,18 @@
 package src.gui;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.*;
+import src.logic.Player;
+import src.logic.QuestionBank;
 
 public class CategoryPanel extends JPanel {
     BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/Category.png");
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     JTextField usernameField = new JTextField("ENTER YOUR USERNAME...");
+    private QuestionBank.Category selectedCategory;
+    private String username;
 
     ImageIcon selectIcon = new ImageIcon(
             new ImageIcon("src/img/Select.png").getImage().getScaledInstance(382, 93, Image.SCALE_SMOOTH));
@@ -32,6 +36,7 @@ public class CategoryPanel extends JPanel {
 
             selectButton1.setIcon(selectActiveIcon);
             activeButton[0] = selectButton1;
+            selectedCategory = QuestionBank.Category.Theoretical;
         });
 
         JButton selectButton2 = new JButton(selectIcon);
@@ -43,6 +48,7 @@ public class CategoryPanel extends JPanel {
 
             selectButton2.setIcon(selectActiveIcon);
             activeButton[0] = selectButton2;
+            selectedCategory = QuestionBank.Category.Programming;
         });
 
         textField();
@@ -53,6 +59,7 @@ public class CategoryPanel extends JPanel {
 
         validate();
         repaint();
+
     }
 
     public void textField() {
@@ -91,6 +98,20 @@ public class CategoryPanel extends JPanel {
                 return;
             }
 
+            username = usernameField.getText();
+            if (username.isEmpty() || username.equals("ENTER YOUR USERNAME...")) {
+                JOptionPane.showMessageDialog(null, "Please enter a valid username!");
+                return;
+            }
+
+            // Create Player instance
+            Player player = new Player(username);
+
+            // Store in GameState
+            GameState.setPlayer(player);
+            GameState.setCategory(selectedCategory);
+
+            // Navigate to TopicsPanel
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(usernameField);
             topFrame.setContentPane(new TopicsPanel());
             topFrame.validate();

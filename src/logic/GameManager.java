@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import src.logic.characters.Classmate;
 import src.logic.data.Record;
 import src.logic.tools.DebugTools;
@@ -23,9 +22,8 @@ public class GameManager {
     private boolean isGameActive;
     private Record recordManager = new Record();
     private DebugTools debugTools = new DebugTools();
-    Scanner scanner = new Scanner(System.in);
 
-    // Start Game
+    // Constructor for GUI - does not auto-start terminal game
     public GameManager(QuestionBank questionBank, Player currentPlayer) {
         this.questionBank = (questionBank != null) ? questionBank : new QuestionBank();
         this.player = currentPlayer;
@@ -35,118 +33,104 @@ public class GameManager {
         this.availableQuestions = new ArrayList<>();
         this.debugToolsUsage = new HashMap<>();
         this.currentQuestion = null;
-        startGame();
+        this.initializeDebugTools();
     }
 
-    public void startGame() {
-        System.out.println("[GameManager] Starting game...");
-        isGameActive = true;
-
-        chooseCategory();
+    // Initialize game with category - called by GUI
+    public void initializeGame(QuestionBank.Category category) {
+        this.chosenCategory = category;
+        this.questionBank.loadCategory(category);
+        this.isGameActive = true;
         loadQuestions();
-        gameLoop();
     }
 
-    // Choose category (theoretical/programming)
-    public QuestionBank.Category chooseCategory() {
-        System.out.println("\nChoose a category:");
-        System.out.println("1. Theoretical");
-        System.out.println("2. Programming");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-
-        chosenCategory = (choice == 1) ? QuestionBank.Category.Theoretical : QuestionBank.Category.Programming;
-        questionBank.loadCategory(chosenCategory);
-
-        return chosenCategory;
-    }
-
-    public Classmate selectClassmate() {
-        return null;
-    }
-
-    // Load 10 questions from each level L1-L5
+    // Load questions based on the loaded category
     public void loadQuestions() {
         availableQuestions.clear();
         for (int i = 1; i <= 5; i++) {
             List<Question> levelQuestions = questionBank.getQuestionsByLevel("L" + i, 2);
             availableQuestions.addAll(levelQuestions);
         }
-        System.out.println("[GameManager] Loaded " + availableQuestions.size() + " questions into the game.");
-
     }
 
-    // Show all remaining questions
-    private void displayAvailableQuestions() {
-        System.out.println("\nAvailable Questions:");
-
-        for (int i = 0; i < availableQuestions.size(); i++) {
-            Question q = availableQuestions.get(i);
-            System.out.println((i + 1) + ". " + q.getDifficulty() + " - " + q.getTopic());
-        }
-
-    }
-
-    public int chooseQuestion() {
-        System.out.println("Choose a topic from the above list: (0 to quit)");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-
-        if (choice == 0) {
-            endGame();
-        }
-        if (choice < 1 || choice >= availableQuestions.size()) {
-            System.out.println("Invalid choice. Please try again.");
-        }
-
-        return choice;
-    }
-
-    public Question getQuestionByTopicByTopic(String topic, String difficulty) {
-        for (Question q : availableQuestions) {
-            if (q.getTopic().equals(topic)) {
-                return q;
-            }
-        }
+    public Classmate selectClassmate() {
         return null;
     }
 
-    public void gameLoop() {
-        while (isGameActive && currentQuestionIndex < availableQuestions.size()) {
-            displayAvailableQuestions();
-            currentQuestion = availableQuestions.get(chooseQuestion() - 1);
-            presentQuestion(currentQuestion);
-            availableQuestions.remove(currentQuestion);
+    // Get question by topic code (e.g., "Prod5", "Func1", etc.)
+    public Question getQuestionByTopicCode(String topicCode) {
+        // Parse topic code to get difficulty (last character) and topic prefix
+        if (topicCode.length() < 2) {
+            return null;
         }
-        endGame();
+
+        String difficulty = "L" + topicCode.substring(topicCode.length() - 1);
+        String topicPrefix = topicCode.substring(0, topicCode.length() - 1);
+
+        // Map topic prefixes to full topic names
+        String topicName = mapTopicPrefixToName(topicPrefix);
+
+        // Find matching question
+        for (Question q : availableQuestions) {
+            if (q.getDifficulty().equals(difficulty) && q.getTopic().toLowerCase().contains(topicName.toLowerCase())) {
+                currentQuestion = q;
+                return q;
+            }
+        }
+
+        // If no exact match, get any question with matching difficulty
+        for (Question q : availableQuestions) {
+            if (q.getDifficulty().equals(difficulty)) {
+                currentQuestion = q;
+                return q;
+            }
+        }
+
+        return null;
     }
 
-    // Present question to player
-    public void presentQuestion(Question question) {
-        System.out.println("\n[" + question.getDifficulty() + " - " + question.getTopic() + "]");
-        System.out.println(question.getQuestionText());
-
-        String[] options = question.getOptions();
-        for (int i = 0; i < options.length; i++) {
-            System.out.println((i + 1) + ". " + options[i]);
+    private String mapTopicPrefixToName(String prefix) {
+        // Map topic codes to topic names
+        switch (prefix) {
+            case "Prod":
+                return "Procedural";
+            case "Func":
+                return "Functional";
+            case "OOP":
+                return "Object-Oriented";
+            case "Imp":
+                return "Imperative";
+            case "Dec":
+                return "Declarative";
+            case "Evdr":
+                return "Event-Driven";
+            default:
+                return prefix;
         }
+    }
 
-        System.out.println("Enter your choice (1-4): ");
-        int choice = scanner.nextInt() - 1;
-        scanner.nextLine();
+    // Load a specific question (GUI method)
+    public void loadQuestion(Question question) {
+        this.currentQuestion = question;
+    }
 
-        boolean correct = submitAnswer(choice);
-        if (correct) {
-            System.out.println("Correct answer!");
-        } else {
-            System.out.println("Wrong answer!");
+    // Get current question (GUI method)
+    public Question getCurrentQuestion() {
+        return currentQuestion;
+    }
 
-        }
+    // Get player instance
+    public Player getPlayer() {
+        return player;
+    }
+
+    // Get category
+    public QuestionBank.Category getCategory() {
+        return chosenCategory;
     }
 
     public boolean submitAnswer(int choiceIndex) {
         if (currentQuestion == null) {
-            System.out.println("No current question to answer.");
             return false;
         }
 
@@ -156,22 +140,23 @@ public class GameManager {
         if (correct) {
             player.addScore(points);
             player.incrementCorrect();
-            System.out.println("Correct! +" + points + " pts");
         } else {
             player.deductScore(points);
-            System.out.println("Wrong! -" + points + " pts");
         }
 
-        System.out.println("Current Score: " + player.getScore());
         return correct;
+    }
+
+    // Get points for current question (for GUI display)
+    public int getCurrentQuestionPoints() {
+        if (currentQuestion == null) {
+            return 0;
+        }
+        return currentQuestion.getDifficultyPoints();
     }
 
     public void endGame() {
         isGameActive = false;
-
-        System.out.println("\n[GameManager] Game Over!");
-        System.out.println("Final Score: " + player.getScore());
-        System.out.println("Correct Answers: " + player.getCorrectCount());
         // recordManager.saveRecord(player);
     }
 
@@ -193,10 +178,31 @@ public class GameManager {
 
     // START OF DEBUG TOOLS
     public void initializeDebugTools() {
-        debugToolsUsage.put("Refactor", false);
-        debugToolsUsage.put("ConsoleLog", false);
-        debugToolsUsage.put("CtrlC", false);
-        debugToolsUsage.put("AutoDebug", false);
+        if (debugToolsUsage.isEmpty()) {
+            debugToolsUsage.put("Refactor", false);
+            debugToolsUsage.put("ConsoleLog", false);
+            debugToolsUsage.put("CtrlC", false);
+            debugToolsUsage.put("AutoDebug", false);
+        }
+    }
+
+    // Check if debug tool is available
+    public boolean isDebugToolAvailable(String toolName) {
+        return !debugToolsUsage.getOrDefault(toolName, true);
+    }
+
+    // Get debug tools usage map (for GUI)
+    public Map<String, Boolean> getDebugToolsUsage() {
+        return new HashMap<>(debugToolsUsage);
+    }
+
+    // Set selected classmate (for debug tools)
+    public void setSelectedClassmate(Classmate classmate) {
+        this.selectedClassmate = classmate;
+    }
+
+    public Classmate getSelectedClassmate() {
+        return selectedClassmate;
     }
 
     public void dispayDebugTools() {
