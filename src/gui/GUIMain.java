@@ -3,7 +3,11 @@ package src.gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class Main {
+/**
+ * GUI entry point for the Programming Paradigms Quiz Game.
+ * Called by the unified src.Main launcher.
+ */
+public class GUIMain {
     public static void main(String[] args) {
         System.setProperty("sun.java2d.uiScale", "1.0");
         JFrame frame = new JFrame("Game Splash Screen");
@@ -43,3 +47,4 @@ public class Main {
         frame.setVisible(true);
     }
 }
+

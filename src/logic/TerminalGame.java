@@ -2,7 +2,11 @@ package src.logic;
 
 import java.util.Scanner;
 
-public class Game {
+/**
+ * Terminal/Console entry point for the Programming Paradigms Quiz Game.
+ * Called by the unified src.Main launcher.
+ */
+public class TerminalGame {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to the Programming Paradigms Quiz Game!");
@@ -23,6 +27,5 @@ public class Game {
         System.out.println("Correct answers: " + player.getCorrectCount());
 
         scanner.close();
-
     }
 }
