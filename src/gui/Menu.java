@@ -1,7 +1,7 @@
 package src.gui;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class Menu extends JPanel {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

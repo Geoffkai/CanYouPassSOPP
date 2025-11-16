@@ -1,9 +1,9 @@
 package src.gui;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.*;
 
 public class PlayPanel extends JPanel {
     BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/ClickableClassmates.png");
