@@ -68,6 +68,10 @@ public class GameState {
             return Geoff;
         } else if ("Yvonne".equals(characterName)) {
             return Yvonne;
+        } else if ("Anon".equals(characterName) || "Elmer".equals(characterName) || "Merry".equals(characterName)) {
+            // For characters without specific icons, return null (will be handled
+            // gracefully)
+            return null;
         }
         return null;
     }

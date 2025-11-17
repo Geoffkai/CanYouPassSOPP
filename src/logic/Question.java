@@ -28,13 +28,13 @@ public class Question {
             case "L1":
                 return 100;
             case "L2":
-                return 200;
+                return 250;
             case "L3":
-                return 300;
-            case "L4":
-                return 400;
-            case "L5":
                 return 500;
+            case "L4":
+                return 750;
+            case "L5":
+                return 1000;
             default:
                 return 0;
         }

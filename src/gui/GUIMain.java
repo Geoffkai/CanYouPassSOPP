@@ -18,33 +18,34 @@ public class GUIMain {
         frame.setSize(screenSize.width, screenSize.height);
 
         // Background panel
-        BackgroundPanel splashScreen = new BackgroundPanel(
-                "C://Users//LENOVO//OneDrive//Dokumen//2nd 1st//CMSC 13//Machine Problem Files//src//img//Splash.png");
+        BackgroundPanel splashScreen = new BackgroundPanel("src/img/Splash.png");
         splashScreen.setBounds(0, 0, screenSize.width, screenSize.height);
+        splashScreen.setLayout(null);
+        splashScreen.setOpaque(false);
+
+        // Make splash screen clickable
         splashScreen.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 frame.setContentPane(new Menu());
-                frame.revalidate();
+                frame.validate();
                 frame.repaint();
             }
         });
 
-        frame.setContentPane(splashScreen);
-        frame.pack();
-
-        // Exit button
-        frame.setLayout(null);
+        // Exit button (add to splash screen, not frame)
         JButton exitButton = new JButton("X");
         exitButton.setFocusPainted(false);
         exitButton.setBackground(Color.RED);
         exitButton.setForeground(Color.WHITE);
-        exitButton.setBounds(screenSize.width - 60, 20, 50, 50); // position top-right
+        exitButton.setBounds(screenSize.width - 60, 20, 50, 50);
         exitButton.addActionListener(e -> System.exit(0));
-        frame.add(exitButton);
+        splashScreen.add(exitButton);
+
+        frame.setContentPane(splashScreen);
+        frame.setLayout(null);
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
     }
 }
-

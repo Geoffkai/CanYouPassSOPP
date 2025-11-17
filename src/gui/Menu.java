@@ -61,13 +61,17 @@ public class Menu extends JPanel {
         sRButton.setFocusable(false);
         sRButton.setBounds(144, 641, 596, 112);
         sRButton.addActionListener(e -> {
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            topFrame.setContentPane(new SchoolRecordPanel());
+            topFrame.validate();
+            topFrame.repaint();
         });
 
         hTPButton.setFocusable(false);
         hTPButton.setBounds(144, 501, 596, 112);
         hTPButton.addActionListener(e -> {
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            topFrame.setContentPane(new TopicsPanel());
+            topFrame.setContentPane(new InstructionsPanel());
             topFrame.validate();
             topFrame.repaint();
             topFrame.setVisible(true);

@@ -157,7 +157,7 @@ public class GameManager {
 
     public void endGame() {
         isGameActive = false;
-        // recordManager.saveRecord(player);
+        recordManager.saveRecord(player);
     }
 
     // For Future GUI Use
@@ -245,17 +245,18 @@ public class GameManager {
         debugToolsUsage.put("ConsoleLog", true);
     }
 
-    public void useCtrlC(Question question) {
+    public boolean useCtrlC(Question question) {
         if (debugToolsUsage.get("CtrlC")) {
             System.out.println("Ctrl C tool has already been used.");
-            return;
+            return false;
         }
 
         if (selectedClassmate == null) {
             System.out.println("No classmate selected for Ctrl C.");
-            return;
+            return false;
         }
 
         boolean correct = debugTools.ctrlC(selectedClassmate, question);
+        return correct;
     }
 }

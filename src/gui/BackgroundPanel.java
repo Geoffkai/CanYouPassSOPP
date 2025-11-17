@@ -8,6 +8,7 @@ public class BackgroundPanel extends JPanel {
 
     public BackgroundPanel(String imagePath) {
         background = new ImageIcon(imagePath).getImage();
+        setOpaque(false);
     }
 
     public void setBackground(String imagePath) {
