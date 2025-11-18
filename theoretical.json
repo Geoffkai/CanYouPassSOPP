@@ -1,0 +1,513 @@
+{
+    "Introduction to Programming Paradigms": [
+      {
+        "id": 1,
+        "level": "L1",
+        "question": "Which best defines a programming paradigm?",
+        "choices": ["A programming language syntax", "A style or way of programming", "A compiler optimization technique", "A debugging tool"],
+        "correctIndex": 1
+      },
+      {
+        "id": 2,
+        "level": "L1",
+        "question": "Which paradigm is characterized by “programming with explicit commands that update state”?",
+        "choices": ["Declarative", "Imperative", "Functional", "Visual"],
+        "correctIndex": 1
+      },
+      {
+        "id": 3,
+        "level": "L2",
+        "question": "Which of the following is NOT a programming paradigm?",
+        "choices": ["Imperative Programming", "Object-Oriented Programming", "Data-Driven Programming", "Declarative Programming"],
+        "correctIndex": 2
+      },
+      {
+        "id": 4,
+        "level": "L2",
+        "question": "Which programming paradigm focuses on what to do, rather than how to do it?",
+        "choices": ["Imperative Programming", "Procedural Programming", "Object-Oriented Programming", "Declarative Programming"],
+        "correctIndex": 3
+      },
+      {
+        "id": 5,
+        "level": "L3",
+        "question": "Which paradigm is characterized by breaking down a program into procedures or functions?",
+        "choices": ["Object-Oriented Programming", "Functional Programming", "Procedural Programming", "Logic Programming"],
+        "correctIndex": 2
+      },
+      {
+        "id": 6,
+        "level": "L3",
+        "question": "Which of the following is a key benefit of Object-Oriented Programming?",
+        "choices": ["It focuses on procedures and functions", "It allows for data encapsulation and reusability", "It eliminates the need for variables", "It allows for state manipulation in functions"],
+        "correctIndex": 1
+      },
+      {
+        "id": 7,
+        "level": "L4",
+        "question": "Which language is a good example of a multi-paradigm language?",
+        "choices": ["C++", "Python", "Haskell", "FORTRAN"],
+        "correctIndex": 1
+      },
+      {
+        "id": 8,
+        "level": "L4",
+        "question": "What is the primary criticism of paradigm classification?",
+        "choices": ["They only apply to old languages", "Most languages mix paradigms", "They don’t include object orientation", "They are too mathematical"],
+        "correctIndex": 1
+      },
+      {
+        "id": 9,
+        "level": "L5",
+        "question": "What is a key intellectual value in learning multiple paradigms?",
+        "choices": ["Memorizing syntax", "Preventing debugging", "Broadening problem-solving perspectives", "Avoiding new languages"],
+        "correctIndex": 2
+      },
+      {
+        "id": 10,
+        "level": "L5",
+        "question": "What is the main advantage of high-level languages over assembly?",
+        "choices": ["Machine dependency", "Algebraic expressions", "Direct hardware control", "Fewer abstractions"],
+        "correctIndex": 1
+      }
+    ],
+  
+    "Procedural Programming": [
+      {
+        "id": 11,
+        "level": "L1",
+        "question": "What is a procedure in procedural programming?",
+        "choices": ["An object method", "A set of computational steps", "A storage location", "A data type"],
+        "correctIndex": 1
+      },
+      {
+        "id": 12,
+        "level": "L1",
+        "question": "Which technique is commonly used to repeat tasks in procedural programs?",
+        "choices": ["Inheritance", "Iteration", "Messaging", "Polymorphism"],
+        "correctIndex": 1
+      },
+      {
+        "id": 13,
+        "level": "L2",
+        "question": "What does modularity primarily promote?",
+        "choices": ["Repetition of code", "Separation and recombination of components", "Memory leakage", "Global variables"],
+        "correctIndex": 1
+      },
+      {
+        "id": 14,
+        "level": "L2",
+        "question": "What is recursion?",
+        "choices": ["A function repeating a loop", "A function calling itself", "A function with no return type", "A pointer to a pointer"],
+        "correctIndex": 1
+      },
+      {
+        "id": 15,
+        "level": "L3",
+        "question": "Why is modularity useful in team projects?",
+        "choices": ["Encourages global variables", "Allows multiple people to work on separate modules", "Reduces testing", "Prevents compilation"],
+        "correctIndex": 1
+      },
+      {
+        "id": 16,
+        "level": "L3",
+        "question": "Which of the following best describes Procedural Programming?",
+        "choices": ["A method of breaking down a program into functions or procedures", "A method where objects communicate with each other", "A language-independent approach", "A way of organizing data structures"],
+        "correctIndex": 0
+      },
+      {
+        "id": 17,
+        "level": "L4",
+        "question": "Which of the following is a limitation of Procedural Programming?",
+        "choices": ["It focuses too much on what to do rather than how to do it", "It is prone to memory leaks due to side effects", "It can become difficult to maintain in large programs", "It lacks flexibility in handling large data structures"],
+        "correctIndex": 2
+      },
+      {
+        "id": 18,
+        "level": "L4",
+        "question": "What is the primary benefit of modularity in Procedural Programming?",
+        "choices": ["It ensures functions cannot modify data", "It allows the program to be written without loops", "It makes code easier to test, debug, and reuse", "It eliminates the need for functions"],
+        "correctIndex": 2
+      },
+      {
+        "id": 19,
+        "level": "L5",
+        "question": "In which case would a static function be used in Procedural Programming?",
+        "choices": ["When the function needs to be accessed from other modules", "When the function should only be accessed within its own module", "When the function is recursive", "When the function modifies global variables"],
+        "correctIndex": 1
+      },
+      {
+        "id": 20,
+        "level": "L5",
+        "question": "Which of these is NOT a type of variable scope in Procedural Programming?",
+        "choices": ["Global", "Local", "Private", "Formal"],
+        "correctIndex": 2
+      }
+    ],
+  
+    "Functional Programming": [
+      {
+        "id": 21,
+        "level": "L1",
+        "question": "What does functional programming treat computation as?",
+        "choices": ["A set of procedures", "Evaluation of mathematical functions", "A sequence of states", "Object interactions"],
+        "correctIndex": 1
+      },
+      {
+        "id": 22,
+        "level": "L1",
+        "question": "Which of the following is a pure function?",
+        "choices": ["A function modifying a global variable", "A function writing to a file", "A function that always returns the same output for the same input", "A function reading user input"],
+        "correctIndex": 2
+      },
+      {
+        "id": 23,
+        "level": "L2",
+        "question": "Which mathematical theory underpins functional programming?",
+        "choices": ["Boolean algebra", "Lambda calculus", "Von Neumann Model", "Graph theory"],
+        "correctIndex": 1
+      },
+      {
+        "id": 24,
+        "level": "L2",
+        "question": "Which concept allows a function to return another function?",
+        "choices": ["Recursion", "Higher-order functions", "Side effects", "Encapsulation"],
+        "correctIndex": 1
+      },
+      {
+        "id": 25,
+        "level": "L3",
+        "question": "What is currying?",
+        "choices": ["Looping through arrays", "Converting a multi-parameter function into single-argument functions", "Optimizing recursion", "Reducing memory usage"],
+        "correctIndex": 1
+      },
+      {
+        "id": 26,
+        "level": "L3",
+        "question": "Which concept in Functional Programming helps to avoid mutable state?",
+        "choices": ["Immutability", "Inheritance", "Recursion", "Dynamic typing"],
+        "correctIndex": 0
+      },
+      {
+        "id": 27,
+        "level": "L4",
+        "question": "Which of these is NOT an advantage of Functional Programming?",
+        "choices": ["Easier to test and parallelize", "Avoids side effects", "Code is more prone to errors", "Functions are treated as first-class citizens"],
+        "correctIndex": 2
+      },
+      {
+        "id": 28,
+        "level": "L4",
+        "question": "Which of these is a key drawback of Functional Programming?",
+        "choices": ["High memory consumption due to immutability", "Difficult to reason about", "Lack of support for higher-order functions", "Difficult to implement on modern hardware"],
+        "correctIndex": 0
+      },
+      {
+        "id": 29,
+        "level": "L5",
+        "question": "Which of the following languages is a pure functional programming language?",
+        "choices": ["Ruby", "Haskell", "Python", "JavaScript"],
+        "correctIndex": 1
+      },
+      {
+        "id": 30,
+        "level": "L5",
+        "question": "Which of these is a key feature of higher-order functions?",
+        "choices": ["They modify global variables", "They return a result based on an external side effect", "They can accept and return other functions", "They cannot use recursion"],
+        "correctIndex": 2
+      }
+    ],
+  
+    "Object-Oriented Programming": [
+      {
+        "id": 31,
+        "level": "L1",
+        "question": "In OOP, a class is best described as:",
+        "choices": ["A data storage unit", "A template for creating objects", "A runtime process", "A function pointer"],
+        "correctIndex": 1
+      },
+      {
+        "id": 32,
+        "level": "L1",
+        "question": "An object created from a class is called:",
+        "choices": ["A method", "A constructor", "An instance", "An attribute"],
+        "correctIndex": 2
+      },
+      {
+        "id": 33,
+        "level": "L2",
+        "question": "What does the __init__ method in Python do?",
+        "choices": ["Returns string representation", "Initializes object attributes", "Deletes an object", "Defines inheritance"],
+        "correctIndex": 1
+      },
+      {
+        "id": 34,
+        "level": "L2",
+        "question": "Which keyword represents the current object instance in Python methods?",
+        "choices": ["this", "self", "obj", "cls"],
+        "correctIndex": 1
+      },
+      {
+        "id": 35,
+        "level": "L3",
+        "question": "What is encapsulation?",
+        "choices": ["Hiding internal details of an object", "Reusing methods across objects", "Inheriting parent attributes", "Overloading operators"],
+        "correctIndex": 0
+      },
+      {
+        "id": 36,
+        "level": "L3",
+        "question": "Which of these allows classes to form hierarchies?",
+        "choices": ["Abstraction", "Inheritance", "Polymorphism", "Composition"],
+        "correctIndex": 1
+      },
+      {
+        "id": 37,
+        "level": "L4",
+        "question": "What is the difference between instance variables and class variables?",
+        "choices": ["Both store the same data", "Instance variables are unique per object; class variables are shared", "Class variables are private; instance variables are public", "Instance variables are faster"],
+        "correctIndex": 1
+      },
+      {
+        "id": 38,
+        "level": "L4",
+        "question": "Which OOP principle allows the same method name to have different implementations in subclasses?",
+        "choices": ["Abstraction", "Encapsulation", "Polymorphism", "Composition"],
+        "correctIndex": 2
+      },
+      {
+        "id": 39,
+        "level": "L5",
+        "question": "In Python, what does the __str__ method define?",
+        "choices": ["Constructor behavior", "Object destruction", "Human-readable string representation", "Operator overloading"],
+        "correctIndex": 2
+      },
+      {
+        "id": 40,
+        "level": "L5",
+        "question": "Which of these best defines a \"constructor\" in OOP?",
+        "choices": ["A method used to destroy objects", "A method that initializes an object’s attributes", "A method used to update object data", "A method that facilitates inheritance"],
+        "correctIndex": 1
+      }
+    ],
+  
+    "Imperative vs Declarative Programming": [
+      {
+        "id": 41,
+        "level": "L1",
+        "question": "Imperative programming is mainly concerned with:",
+        "choices": ["What to compute", "How to compute", "When to compute", "Why to compute"],
+        "correctIndex": 1
+      },
+      {
+        "id": 42,
+        "level": "L1",
+        "question": "Declarative programming specifies:",
+        "choices": ["Steps to update state", "The result desired", "CPU registers to use", "Memory management"],
+        "correctIndex": 1
+      },
+      {
+        "id": 43,
+        "level": "L2",
+        "question": "In imperative programming, control flow is:",
+        "choices": ["Implicit", "Explicit", "Inferred by engine", "Absent"],
+        "correctIndex": 1
+      },
+      {
+        "id": 44,
+        "level": "L2",
+        "question": "Which is a declarative feature?",
+        "choices": ["Step-by-step instructions", "Pattern matching", "Goto statements", "State mutation"],
+        "correctIndex": 1
+      },
+      {
+        "id": 45,
+        "level": "L3",
+        "question": "Which of the following is an example of a declarative programming language?",
+        "choices": ["Java", "Python", "SQL", "C++"],
+        "correctIndex": 2
+      },
+      {
+        "id": 46,
+        "level": "L3",
+        "question": "Which of these is a drawback of declarative programming?",
+        "choices": ["It can lead to more control over the system", "It may be less efficient for certain tasks", "It requires more code than imperative programming", "It relies too heavily on loops"],
+        "correctIndex": 1
+      },
+      {
+        "id": 47,
+        "level": "L4",
+        "question": "In imperative programming, how is state managed?",
+        "choices": ["Through logical inference", "By manipulating memory directly", "By using side-effect-free functions", "Through abstraction of the control flow"],
+        "correctIndex": 1
+      },
+      {
+        "id": 48,
+        "level": "L4",
+        "question": "Which of these would be considered a disadvantage of imperative programming?",
+        "choices": ["Harder to understand the control flow", "It requires more resources", "Less flexibility in debugging", "More abstract than declarative programming"],
+        "correctIndex": 0
+      },
+      {
+        "id": 49,
+        "level": "L5",
+        "question": "Which programming paradigm under declarative is closest to human reasoning with facts and rules?",
+        "choices": ["Imperative", "Declarative", "Functional", "Logic"],
+        "correctIndex": 3
+      },
+      {
+        "id": 50,
+        "level": "L5",
+        "question": "A compiler translates declarative code into:",
+        "choices": ["Execution plans", "Debugging logs", "Direct assembly", "Network calls"],
+        "correctIndex": 0
+      }
+    ],
+  
+    "Event-Driven Programming": [
+      {
+        "id": 51,
+        "level": "L1",
+        "question": "In event-driven programming, program execution is controlled by:",
+        "choices": ["Loops", "User or system events", "Memory allocation", "Recursion"],
+        "correctIndex": 1
+      },
+      {
+        "id": 52,
+        "level": "L1",
+        "question": "Which component listens for events?",
+        "choices": ["Trigger", "Listener", "Timer", "Function"],
+        "correctIndex": 1
+      },
+      {
+        "id": 53,
+        "level": "L2",
+        "question": "An example of event-driven programming is:",
+        "choices": ["Console input program", "GUI application with button clicks", "Batch processing script", "Compiler design"],
+        "correctIndex": 1
+      },
+      {
+        "id": 54,
+        "level": "L2",
+        "question": "Which of the following best describes an event loop?",
+        "choices": ["A recursive function", "A continuous cycle waiting for events", "A while loop in C", "A class constructor"],
+        "correctIndex": 1
+      },
+      {
+        "id": 55,
+        "level": "L3",
+        "question": "Callback functions in event-driven programming are used to:",
+        "choices": ["Store variables", "Handle events", "Declare objects", "Prevent recursion"],
+        "correctIndex": 1
+      },
+      {
+        "id": 56,
+        "level": "L3",
+        "question": "Which of these is an advantage of event-driven programming?",
+        "choices": ["Reduces interactivity", "Allows responsive applications", "Eliminates debugging", "Removes concurrency"],
+        "correctIndex": 1
+      },
+      {
+        "id": 57,
+        "level": "L4",
+        "question": "Which of the following is NOT a common event in event-driven programming?",
+        "choices": ["Button click", "User input", "Program state change", "Memory allocation"],
+        "correctIndex": 3
+      },
+      {
+        "id": 58,
+        "level": "L4",
+        "question": "Which of the following would be a scenario best suited for event-driven programming?",
+        "choices": ["An online shopping cart system", "A database management system", "A video streaming service", "A command-line utility"],
+        "correctIndex": 0
+      },
+      {
+        "id": 59,
+        "level": "L5",
+        "question": "Which of these is commonly used to handle asynchronous events in event-driven programming?",
+        "choices": ["Callbacks", "Iteration", "Recursion", "Synchronous functions"],
+        "correctIndex": 0
+      },
+      {
+        "id": 60,
+        "level": "L5",
+        "question": "What is the role of an event listener in event-driven programming?",
+        "choices": ["To block events from being processed", "To act as a central dispatcher for events", "To detect and respond to events as they occur", "To organize events in a queue"],
+        "correctIndex": 2
+      }
+    ],
+  
+    "Component Mappings between Programming Paradigms": [
+      {
+        "id": 61,
+        "level": "L1",
+        "question": "Functions in procedural programming most closely map to which OOP concept?",
+        "choices": ["Attributes", "Methods", "Classes", "Interfaces"],
+        "correctIndex": 1
+      },
+      {
+        "id": 62,
+        "level": "L1",
+        "question": "Global variables in procedural code map to what in OOP?",
+        "choices": ["Class variables", "Instance variables", "Methods", "Objects"],
+        "correctIndex": 0
+      },
+      {
+        "id": 63,
+        "level": "L2",
+        "question": "In functional programming, higher-order functions are conceptually similar to what OOP feature?",
+        "choices": ["Inheritance", "Polymorphism", "Encapsulation", "Constructors"],
+        "correctIndex": 1
+      },
+      {
+        "id": 64,
+        "level": "L2",
+        "question": "Declarative programming’s focus on “what” maps in OOP to:",
+        "choices": ["Abstraction", "Recursion", "Mutability", "Iteration"],
+        "correctIndex": 0
+      },
+      {
+        "id": 65,
+        "level": "L3",
+        "question": "Object messaging in OOP resembles which paradigm’s concept?",
+        "choices": ["Function calls in functional programming", "Recursion in procedural", "Rules in logic programming", "Pointers in procedural"],
+        "correctIndex": 0
+      },
+      {
+        "id": 66,
+        "level": "L3",
+        "question": "Modules in procedural programming are equivalent to what in OOP?",
+        "choices": ["Classes", "Instances", "Operators", "Loops"],
+        "correctIndex": 0
+      },
+      {
+        "id": 67,
+        "level": "L4",
+        "question": "Lazy evaluation in functional programming maps to which concept in declarative paradigms?",
+        "choices": ["Implicit execution control", "Explicit loops", "Global state", "Data encapsulation"],
+        "correctIndex": 0
+      },
+      {
+        "id": 68,
+        "level": "L4",
+        "question": "Event-driven callbacks are most similar to which functional feature?",
+        "choices": ["Higher-order functions", "Pure functions", "Pattern matching", "Recursion"],
+        "correctIndex": 0
+      },
+      {
+        "id": 69,
+        "level": "L5",
+        "question": "The concept of state mutation in imperative programming maps to what in OOP?",
+        "choices": ["Object attribute modification", "Method overriding", "Inheritance", "Abstraction"],
+        "correctIndex": 0
+      },
+      {
+        "id": 70,
+        "level": "L5",
+        "question": "Which programming paradigm mapping shows closest equivalence?",
+        "choices": ["Procedural modules ↔ Objects", "Declarative rules ↔ Pointers", "Functional recursion ↔ Class inheritance", "Event listeners ↔ Variables"],
+        "correctIndex": 0
+      }
+    ]
+  }
+  
