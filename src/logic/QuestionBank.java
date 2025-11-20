@@ -18,8 +18,8 @@ public class QuestionBank {
         activeQuestions.clear();
 
         String fileName = (category == Category.Theoretical)
-                ? "C://Users//Merry Grace//Desktop//Prog Files//CMSC 12 J//.Java Files//CanYouPassSOPP//theoretical_questions.csv"
-                : "src/programming_questions.csv";
+                ? "C:/Users/LENOVO/OneDrive/Dokumen/2nd 1st/CMSC 13/Machine Problem Files/theoretical_questions.csv"
+                : "C:/Users/LENOVO/OneDrive/Dokumen/2nd 1st/CMSC 13/Machine Problem Files/programming_questions.csv";
 
         try (
 

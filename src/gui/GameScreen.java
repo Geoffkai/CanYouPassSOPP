@@ -164,9 +164,11 @@ public class GameScreen extends JPanel {
                 MenuBtn.setBounds(172, 64, 93, 93);
                 MenuBtn.addActionListener(e -> {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-                        topFrame.setContentPane(new Menu());
-                        topFrame.validate();
-                        topFrame.repaint();
+                        if (topFrame != null) {
+                                topFrame.setContentPane(new Menu());
+                                topFrame.validate();
+                                topFrame.repaint();
+                        }
                 });
                 MuteBtn.setBounds(300, 64, 93, 93);
                 MuteBtn.addActionListener(e -> toggleMute());
@@ -352,9 +354,11 @@ public class GameScreen extends JPanel {
                 // Show game over panel
                 Timer gameOverTimer = new Timer(500, e -> {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-                        topFrame.setContentPane(new GameOverPanel(player, TOTAL_QUESTIONS, correctCount, won));
-                        topFrame.validate();
-                        topFrame.repaint();
+                        if (topFrame != null) {
+                                topFrame.setContentPane(new GameOverPanel(player, TOTAL_QUESTIONS, correctCount, won));
+                                topFrame.validate();
+                                topFrame.repaint();
+                        }
                 });
                 gameOverTimer.setRepeats(false);
                 gameOverTimer.start();
@@ -507,9 +511,11 @@ public class GameScreen extends JPanel {
                 }
 
                 JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-                topFrame.setContentPane(new TopicsPanel());
-                topFrame.validate();
-                topFrame.repaint();
+                if (topFrame != null) {
+                        topFrame.setContentPane(new TopicsPanel());
+                        topFrame.validate();
+                        topFrame.repaint();
+                }
         }
 
         private void retryQuestion() {
