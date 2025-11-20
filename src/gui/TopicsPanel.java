@@ -1,4 +1,4 @@
-package src.gui;
+package gui;
 
 import java.awt.*;
 import java.util.List;
@@ -113,11 +113,28 @@ public class TopicsPanel extends JPanel {
 
         // Save topics into variables
         switch (level) {
-            case 5 -> { level5aTopic = topicA; level5bTopic = topicB; }
-            case 4 -> { level4aTopic = topicA; level4bTopic = topicB; }
-            case 3 -> { level3aTopic = topicA; level3bTopic = topicB; }
-            case 2 -> { level2aTopic = topicA; level2bTopic = topicB; }
-            case 1 -> { level1aTopic = topicA; level1bTopic = topicB; }
+            case 5: {
+                level5aTopic = topicA; level5bTopic = topicB;
+                break;
+            }
+            case 4: {
+                level4aTopic = topicA; level4bTopic = topicB;
+                break;
+            }
+            case 3: {
+                level3aTopic = topicA; level3bTopic = topicB;
+                break;
+            }
+            case 2: {
+                level2aTopic = topicA; level2bTopic = topicB;
+                break;
+            }
+            case 1: {
+                level1aTopic = topicA; level1bTopic = topicB;
+                break;
+            }
+            default:
+                break;
         }
     }
 

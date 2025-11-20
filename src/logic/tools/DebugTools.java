@@ -1,11 +1,11 @@
-package src.logic.tools;
+package logic.tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import src.logic.Question;
-import src.logic.characters.Classmate;
+import logic.Question;
+import logic.characters.Classmate;
 
 //Debug Tools Class logic
 public class DebugTools {

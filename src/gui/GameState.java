@@ -1,9 +1,9 @@
-package src.gui;
+package gui;
 
 import javax.swing.*;
-import src.logic.GameManager;
-import src.logic.Player;
-import src.logic.QuestionBank;
+import logic.GameManager;
+import logic.Player;
+import logic.QuestionBank;
 
 public class GameState {
     private static String selectedCharacter;

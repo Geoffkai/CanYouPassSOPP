@@ -1,6 +1,6 @@
-package src;
+// default package — removed package declaration to match file location
 
-import src.gui.GUIMain;
+import gui.GUIMain;
 
 /**
  * Unified entry point for the Programming Paradigms Quiz Game.

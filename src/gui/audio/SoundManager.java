@@ -1,4 +1,4 @@
-package src.gui.audio;
+package gui.audio;
 
 public class SoundManager {
 

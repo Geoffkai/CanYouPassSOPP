@@ -1,11 +1,11 @@
-package src.gui;
+package gui;
 
 import java.awt.*;
 import javax.swing.*;
 
 /**
  * GUI entry point for the Programming Paradigms Quiz Game.
- * Called by the unified src.Main launcher.
+ * Called by the unified Main launcher.
  */
 public class GUIMain {
     public static void main(String[] args) {

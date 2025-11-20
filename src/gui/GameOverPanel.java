@@ -1,8 +1,8 @@
-package src.gui;
+package gui;
 
 import java.awt.*;
 import javax.swing.*;
-import src.logic.Player;
+import logic.Player;
 
 public class GameOverPanel extends JPanel {
     private BackgroundPanel backgroundPanel;

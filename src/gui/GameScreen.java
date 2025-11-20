@@ -1,20 +1,20 @@
-package src.gui;
+package gui;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import javax.swing.*;
-import src.logic.GameManager;
-import src.logic.Player;
-import src.logic.Question;
-import src.logic.QuestionBank;
-import src.logic.characters.*;
-import src.logic.tools.DebugTools;
+import logic.GameManager;
+import logic.Player;
+import logic.Question;
+import logic.QuestionBank;
+import logic.characters.*;
+import logic.tools.DebugTools;
 
 public class GameScreen extends JPanel {
         private GameManager gameManager;
         private Question currentQuestion;
-        private JLabel questionLabel;
+        private JTextPane questionLabel;
         private JLabel scoreLabel;
         private JLabel characterLabel;
         private JLabel compileLabel;
@@ -97,10 +97,11 @@ public class GameScreen extends JPanel {
                 refactorUsed = false;
 
                 // Create question and score labels
-                questionLabel = new JLabel("", SwingConstants.CENTER);
-                questionLabel.setFont(new Font("Arial", Font.BOLD, 24));
-                questionLabel.setForeground(Color.WHITE);
-                questionLabel.setBounds(200, 300, 1200, 100);
+                questionLabel = new JTextPane();
+                questionLabel.setContentType("text/html");
+                questionLabel.setEditable(false);
+                questionLabel.setOpaque(false);
+                questionLabel.setBounds(200, 250, 1200, 300);
 
                 scoreLabel = new JLabel("Score: 0", SwingConstants.RIGHT);
                 scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -295,8 +296,7 @@ public class GameScreen extends JPanel {
 
         private void displayQuestion(Question question) {
                 if (question != null) {
-                        questionLabel.setText("<html><div style='text-align: center;'>" +
-                                        question.getQuestionText() + "</div></html>");
+                        questionLabel.setText(formatQuestionText(question.getQuestionText()));
 
                         // Reset button states
                         questionAnswered = false;
@@ -304,6 +304,36 @@ public class GameScreen extends JPanel {
                         enableAllChoiceButtons();
                         updateDebugToolButtons();
                 }
+        }
+        private String formatQuestionText(String text) {
+                // Convert literal '\n' from JSON to real newlines
+                text = text.replace("\\n", "\n");
+
+                // Replace real newlines with <br>
+                text = text.replace("\n", "<br>");
+
+                // Wrap code part in a styled box
+                String styled = ""
+                        + "<html>"
+                        + "<div style='font-family:Arial; font-size:22px; color:white; "
+                        + "text-align:center; margin-bottom:15px;'>"
+                        + "QUESTION:"
+                        + "</div>"
+
+                        + "<div style='font-family:Arial; font-size:18px; color:white; text-align:center; "
+                        + "margin-bottom:20px;'>"
+                        + text.split("<br>")[0]  // first line = question text
+                        + "</div>"
+
+                        + "<div style='background:#2b2b2b; padding:15px; border-radius:10px; "
+                        + "font-family:Consolas, monospace; font-size:18px; color:#e8e8e8; "
+                        + "width:90%; margin:0 auto; text-align:left; "
+                        + "max-height:300px; overflow-y:auto;'>"
+                        + text.substring(text.indexOf("<br>") + 4) // everything after question
+                        + "</div>"
+                        + "</html>";
+
+                return styled;
         }
 
         private void submitAnswer(int choiceIndex) {

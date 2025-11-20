@@ -1,12 +1,12 @@
-package src.logic;
+package logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import src.logic.characters.Classmate;
-import src.logic.data.Record;
-import src.logic.tools.DebugTools;
+import logic.characters.Classmate;
+import logic.data.Record;
+import logic.tools.DebugTools;
 
 public class GameManager {
     private QuestionBank questionBank;

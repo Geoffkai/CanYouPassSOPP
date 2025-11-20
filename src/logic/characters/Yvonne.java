@@ -1,4 +1,4 @@
-package src.logic.characters;
+package logic.characters;
 
 public class Yvonne extends Classmate {
     public Yvonne() {

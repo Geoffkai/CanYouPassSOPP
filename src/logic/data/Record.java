@@ -1,6 +1,6 @@
-package src.logic.data;
+package logic.data;
 
-import src.logic.Player;
+import logic.Player;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;

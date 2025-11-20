@@ -1,0 +1,908 @@
+{
+  "code_to_output": [
+    {
+      "id": 1,
+      "level": "L1",
+      "question": "What is the output of the following C program?\\n#include <stdio.h>\\nint main() {\\n    int a = 5, b = 2;\\n    printf(\"%d\", a / b);\\n    return 0;\\n}",
+      "choices": [
+        "2",
+        "2.5",
+        "3",
+        "Error"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 2,
+      "level": "L1",
+      "question": "Find the output:\\n#include <stdio.h>\\nint main() {\\n   int *p, a = 10;\\n   p = &a;\\n   printf(\"%d\", (*p)++);\\n   printf(\" %d\", a);\\n   return 0;\\n}",
+      "choices": [
+        "10 10",
+        "10 11",
+        "11 11",
+        "11 10"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 3,
+      "level": "L1",
+      "question": "What does this print?\\n#include <stdio.h>\\nint main() {\\n    char str[] = \\\"Hello\\\";\\n    printf(\\\"%c\\\", str[1]);\\n    return 0;\\n}",
+      "choices": [
+        "Hello",
+        "H",
+        "e",
+        "o"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 4,
+      "level": "L1",
+      "question": "Output?\\n#include <stdio.h>\\nint main() {\\n   int arr[] = {1,2,3,4};\\n   printf(\\\"%d\\\", *(arr+2));\\n   return 0;\\n}",
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 5,
+      "level": "L2",
+      "question": "What will be printed?\\n#include <stdio.h>\\nint main() {\\n    int a = 10, b = 20;\\n    int *p = &a, *q = &b;\\n    *p = *q;\\n    printf(\\\"%d %d\\\", a, b);\\n    return 0;\\n}",
+      "choices": [
+        "10 20",
+        "20 10",
+        "20 20",
+        "10 10"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 6,
+      "level": "L2",
+      "question": "Find the output:\\n#include <stdio.h>\\nint main() {\\n    int x = 5;\\n    printf(\\\"%d\\\", x > 3 && x < 10);\\n    return 0;\\n}",
+      "choices": [
+        "1",
+        "0",
+        "True",
+        "Error"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 7,
+      "level": "L2",
+      "question": "What will be printed?\\n#include <stdio.h>\\nint main() {\\n    int x = 0;\\n    for(int i = 0; i < 5; i++) {\\n        if(i == 2) continue;\\n        x += i;\\n    }\\n    printf(\\\"%d\\\", x);\\n    return 0;\\n}",
+      "choices": [
+        "8",
+        "10",
+        "7",
+        "9"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 8,
+      "level": "L2",
+      "question": "Find the output:\\n#include <stdio.h>\\nint main() {\\n    char c = 'A';\\n    printf(\\\"%d\\\", c);\\n    return 0;\\n}",
+      "choices": [
+        "A",
+        "65",
+        "97",
+        "0"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 9,
+      "level": "L3",
+      "question": "What is the output (Java)?\\npublic class Main {\\n    public static void main(String[] args) {\\n        int x = 10;\\n        int y = x++;\\n        System.out.println(y);\\n    }\\n}",
+      "choices": [
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 10,
+      "level": "L3",
+      "question": "Output?\\npublic class Main {\\n  public static void main(String[] args) {\\n        String str = \\\"Programming\\\";\\n        System.out.println(str.substring(0, 4));\\n    }\\n}",
+      "choices": [
+        "Prog",
+        "Progr",
+        "Programming",
+        "Program"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 11,
+      "level": "L3",
+      "question": "Find the result.\\npublic class Main {\\n  public static void main(String[] args) {\\n    String str = \\\"Java\\\";\\n    System.out.println(str.length());\\n  }\\n}",
+      "choices": [
+        "5",
+        "4",
+        "Error",
+        "3"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 12,
+      "level": "L4",
+      "question": "Output?\\npublic class Main {\\n  public static void main(String[] args) {\\n    String s1 = \\\"Hello\\\";\\n    String s2 = new String(\\\"Hello\\\");\\n    System.out.println(s1 == s2);\\n  }\\n}",
+      "choices": [
+        "true",
+        "false",
+        "0",
+        "null"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 13,
+      "level": "L4",
+      "question": "Result?\\npublic class Main {\\n  public static void main(String[] args) {\\n    for(int i = 0; i < 3; i++) {\\n            if(i == 1) break;\\n            System.out.print(i + \\\" \\\");\\n        }\\n  }\\n}",
+      "choices": [
+        "0 1 2",
+        "0 1",
+        "0",
+        "1 2"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 14,
+      "level": "L4",
+      "question": "What is printed?\\npublic class Main {\\n  public static void main(String[] args) {\\n    char c = 'A';\\n    System.out.println((int)c + 1);\\n  }\\n}",
+      "choices": [
+        "65",
+        "66",
+        "A",
+        "1"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 15,
+      "level": "L4",
+      "question": "Output?\\npublic class Main {\\n  public static void main(String[] args) {\\n    System.out.println(28 & 17);\\n  }\\n}",
+      "choices": [
+        "0",
+        "Error",
+        "18",
+        "16"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 16,
+      "level": "L5",
+      "question": "Find the output.\\nclass Main {\\n  public static void main(String[] args) {\\n    System.out.println(10+20+\\\"Java\\\"+10+10);\\n  }\\n}",
+      "choices": [
+        "30Java20",
+        "30Java1010",
+        "1020Java1010",
+        "10+20+Java+10+10"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 17,
+      "level": "L5",
+      "question": "Python: What is the output?\\nx = [1, 2, 3, 4, 5]\\nprint(x[1:4])",
+      "choices": [
+        "[1, 2, 3]",
+        "[2, 3, 4]",
+        "[2, 3, 4, 5]",
+        "[1, 2, 3, 4]"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 18,
+      "level": "L5",
+      "question": "Python: What is the output?\\ndef multiply(a, b=2):\\n    return a * b\\n\\nresult = multiply(5)\\nprint(result)",
+      "choices": [
+        "5",
+        "7",
+        "10",
+        "Error"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 19,
+      "level": "L5",
+      "question": "Python: What is the output?\\nmy_dict = {'name': 'John', 'age': 25, 'city': 'New York'}\\nprint(len(my_dict))",
+      "choices": [
+        "2",
+        "3",
+        "4",
+        "25"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 20,
+      "level": "L5",
+      "question": "Python: What is the output?\\na = [1, 2, 3]\\nb = a\\nb.append(4)\\nprint(a)",
+      "choices": [
+        "[1, 2, 3]",
+        "Error",
+        "[4, 3, 2, 1]",
+        "[1, 2, 3, 4]"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 21,
+      "level": "L5",
+      "question": "Python: What is the output?\\ntext = \\\"Python Programming\\\"\\nprint(text.split()[1])",
+      "choices": [
+        "Programming",
+        "Python",
+        "P",
+        "g"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 22,
+      "level": "L5",
+      "question": "JavaScript: What is the output?\\nlet x = 5;\\nlet y = \\\"5\\\";\\nconsole.log(x == y);\\nconsole.log(x === y);",
+      "choices": [
+        "true true",
+        "false false",
+        "true false",
+        "false true"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 23,
+      "level": "L5",
+      "question": "JavaScript: What is the output?\\nconst multiply = x => y => x * y;\\nconst double = multiply(2);\\n\\nconsole.log(double(25));",
+      "choices": [
+        "2",
+        "y => x * y",
+        "25",
+        "50"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 24,
+      "level": "L5",
+      "question": "JavaScript: What is the output?\\nlet numbers = [1, 2, 3, 4, 5];\\nlet result = numbers.map(num => num * 2);\\nconsole.log(result[2]);",
+      "choices": [
+        "3",
+        "6",
+        "4",
+        "8"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 25,
+      "level": "L5",
+      "question": "JavaScript: What is the output?\\nconst numbers = [1, 2, 3, 4, 5];\\nconst sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);\\nconsole.log(sum);",
+      "choices": [
+        "15",
+        "0",
+        "[1,2,3,4,5]",
+        "14"
+      ],
+      "correctIndex": 0
+    }
+  ],
+  "output_to_code": [
+    {
+      "id": 26,
+      "level": "L1",
+      "question": "Which code snippet produces the expected output?\\nExpected Output: Sum is 15",
+      "choices": [
+        "int sum = 5 + 5;\\nprintf(\"Sum is %d\", sum);",
+        "int sum = 10 + 5;\\nprintf(\"Sum is %d\", sum);",
+        "int sum = 7 + 8;\\nprintf(\"Sum is %d\", sum);",
+        "int sum = 20 - 5;\\nprintf(\"Sum is %d\", sum);"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 27,
+      "level": "L1",
+      "question": "Which code snippet produces the expected output?\\nExpected Output: 5 4 3 2 1",
+      "choices": [
+        "for(int i = 1; i <= 5; i++) printf(\"%d \", i);",
+        "for(int i = 5; i > 0; i--) printf(\"%d \", i);",
+        "for(int i = 0; i < 5; i++) printf(\"%d \", i);",
+        "for(int i = 5; i >= 1; i++) printf(\"%d \", i);"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 28,
+      "level": "L1",
+      "question": "Which code snippet produces the expected output?\\nOutput: 1",
+      "choices": [
+        "printf(\"%d\", 2>3);",
+        "printf(\"%d\", 3>2);",
+        "printf(\"%d\", 5==6);",
+        "printf(\"%d\", 0);"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 29,
+      "level": "L1",
+      "question": "Which code snippet produces the expected output?\\nExpected Output: Hello World",
+      "choices": [
+        "char str1[] = \"Hello\";\\nchar str2[] = \"World\";\\nprintf(\"%s %s\", str1, str2);",
+        "char str[] = \"Hello World\";\\nprintf(\"%s\", str);",
+        "printf(\"Hello\");\\nprintf(\"World\");",
+        "Both A and B"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 30,
+      "level": "L2",
+      "question": "Which code snippet calculates factorial correctly?\\nExpected Output: 120",
+      "choices": [
+        "int fact = 1;\\nfor(int i = 1; i < 5; i++) fact *= i;",
+        "int fact = 1;\\nfor(int i = 1; i <= 5; i++) fact += i;",
+        "int fact = 1;\\nfor(int i = 1; i <= 5; i++) fact *= i;",
+        "int fact = 0;\\nfor(int i = 1; i <= 5; i++) fact *= i;"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 31,
+      "level": "L2",
+      "question": "Which code snippet produces the expected output?\\nOutput: 6",
+      "choices": [
+        "printf(\"%d\", 2*3);",
+        "printf(\"%d\", 3+3);",
+        "printf(\"%d\", 12/2);",
+        "All of the above"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 32,
+      "level": "L2",
+      "question": "Which code snippet produces the expected output?\\nExpected Output: 3.50 given int a=7, b=2",
+      "choices": [
+        "printf(\"%.2f\", a / b);",
+        "printf(\"%.2f\", (float)a / b);",
+        "printf(\"%.2f\", a % b);",
+        "printf(\"%.2f\", (float)(a / b));"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 33,
+      "level": "L3",
+      "question": "Which code snippet produces the expected output?\\nOutput: 8",
+      "choices": [
+        "printf(\"%d\", 2<<2);",
+        "printf(\"%d\", 2*3);",
+        "printf(\"%d\", 4+2);",
+        "printf(\"%d\", 2^3);"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 34,
+      "level": "L3",
+      "question": "Which Java snippet produces this output?\\nExpected Output: Last character: g\\nGiven: String text = \"Programming\"",
+      "choices": [
+        "System.out.println(\"Last character: \" + text.charAt(text.length() - 1));",
+        "System.out.println(\"Last character: \" + text.charAt(text.length()));",
+        "System.out.println(\"Last character: \" + text.last());",
+        "System.out.println(\"Last character: \" + text[text.length() - 1]);"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 35,
+      "level": "L3",
+      "question": "Which Java snippet produces this output?\\nExpected Output: HELLO\\nGiven: String str = \"hello\"",
+      "choices": [
+        "System.out.println(str.toLowerCase());",
+        "System.out.println(str.toUpperCase());",
+        "System.out.println(str.charAt(0));",
+        "System.out.println(str.length());"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 36,
+      "level": "L3",
+      "question": "Which Java snippet finds the index of 'P'?\\nExpected Output: Index: 7\\nGiven: String text = \"Java Programming\"",
+      "choices": [
+        "System.out.println(\"Index: \" + text.indexOf('P'));",
+        "System.out.println(\"Index: \" + text.charAt('P'));",
+        "System.out.println(\"Index: \" + text.length());",
+        "System.out.println(\"Index: \" + text.lastIndexOf('P'));"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 37,
+      "level": "L4",
+      "question": "Which snippet prints Maximum: 100?\\nExpected Output: Maximum: 100\\nGiven: int x = 50, y = 100;",
+      "choices": [
+        "System.out.println(\"Maximum: \" + Math.min(x, y));",
+        "System.out.println(\"Maximum: \" + Math.max(x, y));",
+        "System.out.println(\"Maximum: \" + Math.abs(x - y));",
+        "System.out.println(\"Maximum: \" + (x > y ? x : y));"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 38,
+      "level": "L4",
+      "question": "Which snippet produces true?\\nExpected Output: true\\nGiven: String s1 = \"test\"; String s2 = \"test\";",
+      "choices": [
+        "System.out.println(s1 == s2);",
+        "System.out.println(s1.equals(s2));",
+        "System.out.println(s1.compareTo(s2) == 0);",
+        "All of the above"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 39,
+      "level": "L4",
+      "question": "Which snippet produces Sum: 30?\\nExpected Output: Sum: 30\\nGiven: int a = 10, b = 20;",
+      "choices": [
+        "System.out.println(\"Sum: \" + (a + b));",
+        "System.out.println(\"Sum: \" + a + b);",
+        "int sum = a + a; System.out.println(\"Sum: \" + sum);",
+        "System.out.println(\"Sum: \" + (b + b));"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 40,
+      "level": "L4",
+      "question": "Which code prints 1?\\nOutput: 1",
+      "choices": [
+        "System.out.println(true? 1:0);",
+        "System.out.println(false? 1:0);",
+        "System.out.println(0);",
+        "None of the above"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 41,
+      "level": "L5",
+      "question": "Which snippet prints 10 20 30?\\nExpected Output: 10 20 30\\nGiven: int[] arr = {10,20,30};",
+      "choices": [
+        "for(int i = 0; i < arr.length; i++) System.out.print(arr[i] + \" \");",
+        "for(int num : arr) System.out.print(num + \" \");",
+        "for(int i = 0; i < 3; i++) System.out.print(arr[i] + \" \");",
+        "All of the above"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 42,
+      "level": "L5",
+      "question": "Which Python snippet produces [2, 4, 6, 8, 10]?\\nExpected Output: [2, 4, 6, 8, 10]",
+      "choices": [
+        "numbers = [x for x in range(1, 11) if x % 2 == 0]\\nprint(numbers)",
+        "numbers = [x * 2 for x in range(1, 6)]\\nprint(numbers)",
+        "numbers = list(range(2, 11, 2))\\nprint(numbers)",
+        "All of the above"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 43,
+      "level": "L5",
+      "question": "Which snippet prints Dictionary has key 'name'?\\nExpected Output: Dictionary has key 'name'\\nGiven: student = {'name':'Alice','grade':90}",
+      "choices": [
+        "if 'name' in student.values():\\n    print(\"Dictionary has key 'name'\")",
+        "if 'name' in student:\\n    print(\"Dictionary has key 'name'\")",
+        "if student.get(name):\\n    print(\"Dictionary has key 'name'\")",
+        "Both B and C"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 44,
+      "level": "L5",
+      "question": "Which snippet prints 15?\\nExpected Output: 15\\nGiven: numbers = [1,2,3,4,5]",
+      "choices": [
+        "print(len(numbers))",
+        "print(sum(numbers))",
+        "print(total(numbers))",
+        "Both B and C"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 45,
+      "level": "L5",
+      "question": "Which snippet produces PYTHON?\\nExpected Output: PYTHON\\nGiven: text = 'python'",
+      "choices": [
+        "print(text.upper())",
+        "print(text.title())",
+        "print(text.capitalize())",
+        "print(text.lower())"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 46,
+      "level": "L5",
+      "question": "Which snippet prints cumulative sums 1,3,6,10,15?\\nExpected Output:\\n1\\n3\\n6\\n10\\n15",
+      "choices": [
+        "s = 0\\nfor i in range(1, 6):\\n    s += i\\n    print(s)",
+        "print(sum(range(1,6)))",
+        "for i in range(1,6): print(i*i)",
+        "for i in range(1,6): print(i)"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 47,
+      "level": "L5",
+      "question": "Which JS snippet produces [2, 4, 6]?\\nExpected Output: [2, 4, 6]\\nGiven: let arr = [1,2,3,4,5,6];",
+      "choices": [
+        "let even = arr.filter(n => n % 2 === 0);\\nconsole.log(even);",
+        "let even = arr.map(n => n % 2 === 0);\\nconsole.log(even);",
+        "let even = arr.find(n => n % 2 === 0);\\nconsole.log(even);",
+        "let even = arr.reduce(n => n % 2 === 0);\\nconsole.log(even);"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 48,
+      "level": "L5",
+      "question": "Which JS snippet prints true for all numbers > 0?\\nExpected Output: true\\nGiven: let numbers = [5,10,15,20];",
+      "choices": [
+        "console.log(numbers.some(n => n > 0));",
+        "console.log(numbers.every(n => n > 0));",
+        "console.log(numbers.filter(n => n > 0));",
+        "console.log(numbers.includes(n => n > 0));"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 49,
+      "level": "L5",
+      "question": "Which JS snippet produces 6 for [1,2,3]?\\nExpected Output: 6",
+      "choices": [
+        "const arr = [1,2,3];\\nconsole.log(arr.reduce((a,b)=>a+b));",
+        "const arr = [1,2,3];\\nconsole.log(arr.map(x => x + 1));",
+        "const arr = [1,2,3];\\nconsole.log(arr.length * 3);",
+        "console.log(1 + 2 + \\\"3\\\");"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 50,
+      "level": "L5",
+      "question": "Which JS snippet produces Sum: 30?\\nExpected Output: Sum: 30\\nGiven: let a = 10, b = 20;",
+      "choices": [
+        "console.log(\"Sum: \" + a + b);",
+        "console.log(\"Sum: \" + (a + b));",
+        "console.log(\"Sum: \", a + b);",
+        "Both B and C"
+      ],
+      "correctIndex": 3
+    }
+  ],
+  "fill_in_blank": [
+    {
+      "id": 51,
+      "level": "L1",
+      "question": "Fill in the blank to compute sum of array and print:\n#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int sum = 0;\n    // MISSING LINE\n    printf(\"Sum: %d\", sum);\n    return 0;\n}",
+      "choices": [
+        "for(int i = 0; i < 5; i++) sum = arr[i];",
+        "for(int i = 0; i < 5; i++) sum += arr[i];",
+        "for(int i = 1; i <= 5; i++) sum += arr[i];",
+        "sum = arr[0] + arr[4];"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 52,
+      "level": "L1",
+      "question": "Fill in the blank to concatenate strings and print:\n#include <stdio.h>\n#include <string.h>\nint main() {\n    char str1[20] = \"Hello\";\n    char str2[] = \" World\";\n    // MISSING LINE\n    printf(\"%s\", str1);\n    return 0;\n}",
+      "choices": [
+        "strcat(str1, str2);",
+        "strcpy(str1, str2);",
+        "strcmp(str1, str2);",
+        "strlen(str1);"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 53,
+      "level": "L1",
+      "question": "Fill in the blank to set pointer to x and print:\n#include <stdio.h>\nint main() {\n    int x = 5;\n    int *ptr;\n    // MISSING LINE\n    printf(\"Value: %d\", *ptr);\n    return 0;\n}",
+      "choices": [
+        "ptr = x;",
+        "*ptr = &x;",
+        "ptr = &x;",
+        "&ptr = x;"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 54,
+      "level": "L1",
+      "question": "Fill in the blank to print even numbers 2 4 6 8 10:\n#include <stdio.h>\nint main() {\n    for(int i = 1; i <= 10; i++) {\n        // MISSING LINE\n        printf(\"%d \", i);\n    }\n    return 0;\n}",
+      "choices": [
+        "if(i % 2 == 1)",
+        "if(i % 2 != 0)",
+        "if(i % 2 == 0)",
+        "if(i / 2 == 0)"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 55,
+      "level": "L2",
+      "question": "Fill in the blank to compute square of n and print:\n#include <stdio.h>\nint main() {\n    int n = 10;\n    // MISSING LINE\n    printf(\"Result: %d\", result);\n    return 0;\n}",
+      "choices": [
+        "int result = n + n;",
+        "int result = n * n;",
+        "int result = n / n;",
+        "int result = n - n;"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 56,
+      "level": "L2",
+      "question": "Fill in the blank: Access third element via pointer:\n#include <stdio.h>\nint main() {\n    int arr[] = {5, 10, 15, 20, 25};\n    int *ptr = arr;\n    // MISSING LINE\n    printf(\"Value: %d\", value);\n    return 0;\n}",
+      "choices": [
+        "int value = *ptr + 2;",
+        "int value = *(ptr + 2);",
+        "int value = ptr[3];",
+        "int value = &ptr[2];"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 57,
+      "level": "L2",
+      "question": "Fill in the blank: Compute string length using strlen:\n#include <stdio.h>\n#include <string.h>\nint main() {\n    char str[50] = \"Programming\";\n    // MISSING LINE\n    printf(\"Length: %d\", len);\n    return 0;\n}",
+      "choices": [
+        "int len = sizeof(str);",
+        "int len = str.length();",
+        "int len = length(str);",
+        "int len = strlen(str);"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 58,
+      "level": "L2",
+      "question": "Fill in the blank: swap two integers via pointers:\n#include <stdio.h>\nvoid swap(int *a, int *b) {\n    int temp = *a;\n    // MISSING LINE\n    *b = temp;\n}\nint main() {\n    int x = 10, y = 20;\n    swap(&x, &y);\n    printf(\"%d %d\", x, y);\n    return 0;\n}",
+      "choices": [
+        "*a = *b;",
+        "*a = b;",
+        "a = *b;",
+        "a = b;"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 59,
+      "level": "L3",
+      "question": "Fill in the blank to compute cube:\n#include <stdio.h>\nint main() {\n    int num = 5;\n    int cube;\n    // MISSING LINE\n    printf(\"Cube: %d\", cube);\n    return 0;\n}",
+      "choices": [
+        "cube = num * 3;",
+        "cube = num * num;",
+        "cube = num * num * num;",
+        "cube = pow(num, 3);"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 60,
+      "level": "L3",
+      "question": "Java: find maximum in array (missing line):\npublic class Test {\n    public static void main(String[] args) {\n        int[] numbers = {5, 10, 15, 20, 25};\n        int max = numbers[0];\n        // MISSING LINE\n        System.out.println(\"Maximum: \" + max);\n    }\n}",
+      "choices": [
+        "for(int i = 1; i < numbers.length; i++) if(numbers[i] > max) max = numbers[i];",
+        "for(int i = 0; i < numbers.length; i++) max = numbers[i];",
+        "for(int num : numbers) if(num < max) max = num;",
+        "max = numbers[numbers.length];"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 61,
+      "level": "L3",
+      "question": "Java: convert string to lowercase (missing line):\npublic class Test {\n    public static void main(String[] args) {\n        String str = \"Hello World\";\n        // MISSING LINE\n        System.out.println(result);\n    }\n}",
+      "choices": [
+        "String result = str.toUpperCase();",
+        "String result = str.toLowerCase();",
+        "String result = str.trim();",
+        "String result = str.substring(0, 5);"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 62,
+      "level": "L3",
+      "question": "Java: instantiate a new MyClass (missing line):\npublic class Test {\n    public static void main(String[] args) {\n        // MISSING LINE\n    }\n}",
+      "choices": [
+        "myClass = MyClass();",
+        "myClass = new MyClass();",
+        "MyClass myClass = MyClass();",
+        "MyClass myClass = new MyClass();"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 63,
+      "level": "L3",
+      "question": "Java: get ArrayList size (missing line):\nimport java.util.ArrayList;\npublic class Test {\n    public static void main(String[] args) {\n        ArrayList<Integer> list = new ArrayList<>();\n        list.add(10);\n        list.add(20);\n        list.add(30);\n        // MISSING LINE\n        System.out.println(\"Size: \" + size);\n    }\n}",
+      "choices": [
+        "int size = list.length;",
+        "int size = list.length();",
+        "int size = list.size();",
+        "int size = list.count();"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 64,
+      "level": "L3",
+      "question": "Java: extract first word (missing line):\npublic class Test {\n    public static void main(String[] args) {\n        String text = \"Hello World Java Programming\";\n        // MISSING LINE\n        System.out.println(\"First word: \" + firstWord);\n    }\n}",
+      "choices": [
+        "String firstWord = text.substring(0, 5);",
+        "String firstWord = text.split(\" \")[1];",
+        "String firstWord = text.charAt(0);",
+        "Both A and B"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 65,
+      "level": "L3",
+      "question": "Java: compute sum 1..n (missing line):\npublic class Test {\n    public static void main(String[] args) {\n        int n = 10;\n        int sum = 0;\n        // MISSING LINE\n        System.out.println(\"Sum: \" + sum);\n    }\n}",
+      "choices": [
+        "for(int i = 1; i <= n; i++) sum += i;",
+        "for(int i = 1; i < n; i++) sum += i;",
+        "for(int i = 0; i <= n; i++) sum += i;",
+        "sum = (n + 1) / 2;"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 66,
+      "level": "L4",
+      "question": "Java: password length check (missing line):\npublic class Test {\n    public static void main(String[] args) {\n        String password = \"SecurePass123\";\n        // MISSING LINE\n        System.out.println(\"Length valid: \" + isValid);\n    }\n}",
+      "choices": [
+        "boolean isValid = password.length() > 8;",
+        "boolean isValid = password.length() >= 8;",
+        "boolean isValid = password.size() >= 8;",
+        "boolean isValid = password.count() >= 8;"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 67,
+      "level": "L4",
+      "question": "Java: reverse string (missing line):\npublic class Test {\n    public static void main(String[] args) {\n        String original = \"abcdef\";\n        // MISSING LINE\n        System.out.println(reversed);\n    }\n}",
+      "choices": [
+        "String reversed = new StringBuilder(original).reverse().toString();",
+        "String reversed = original.reverse();",
+        "String reversed = original.reversed();",
+        "String reversed = StringBuffer(original).reverse();"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 68,
+      "level": "L4",
+      "question": "Java: matrix columns (missing line):\npublic class Test {\n    public static void main(String[] args) {\n        int[][] matrix = {{1, 2, 3}, {4, 5, 6}};\n        // MISSING LINE\n        System.out.println(\"Columns: \" + cols);\n    }\n}",
+      "choices": [
+        "int cols = matrix.length;",
+        "int cols = matrix[0].length;",
+        "int cols = matrix[1].length;",
+        "Both B and C"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 69,
+      "level": "L5",
+      "question": "Python: calculate average (missing line):\ndef calculate_average(numbers):\n    total = sum(numbers)\n    # MISSING LINE\n    return average\n\nscores = [85, 90, 78, 92, 88]\nprint(f\"Average: {calculate_average(scores)}\")",
+      "choices": [
+        "average = total / len(numbers)",
+        "average = total // len(numbers)",
+        "average = total * len(numbers)",
+        "average = len(numbers) / total"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 70,
+      "level": "L5",
+      "question": "Python: build even numbers list (missing line):\nmy_list = [1,2,3,4,5,6,7,8,9,10]\n# MISSING LINE\nprint(even_numbers)",
+      "choices": [
+        "even_numbers = [x for x in my_list if x % 2 == 1]",
+        "even_numbers = [x for x in my_list if x % 2 == 0]",
+        "even_numbers = [x for x in my_list if x // 2 == 0]",
+        "even_numbers = [x for x in my_list if x % 2]"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 71,
+      "level": "L5",
+      "question": "Python: find maximum (missing line):\ndef find_maximum(a, b, c):\n    # MISSING LINE\n    return max_value\n\nresult = find_maximum(15, 30, 22)\nprint(f\"Maximum: {result}\")",
+      "choices": [
+        "max_value = min(a, b, c)",
+        "max_value = max(a, b, c)",
+        "max_value = sum(a, b, c)",
+        "max_value = (a + b + c) / 3"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 72,
+      "level": "L5",
+      "question": "Python: count words in sentence (missing line):\nsentence = \"Hello World Python Programming\"\n# MISSING LINE\nprint(f\"Number of words: {word_count}\")",
+      "choices": [
+        "word_count = len(sentence)",
+        "word_count = sentence.count(' ')",
+        "word_count = len(sentence.split())",
+        "word_count = sentence.split()"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 73,
+      "level": "L5",
+      "question": "Python: sort list (missing line):\nnumbers = [5, 2, 8, 1, 9, 3]\n# MISSING LINE\nprint(numbers)",
+      "choices": [
+        "numbers.reverse()",
+        "numbers.sort()",
+        "numbers.append()",
+        "numbers.remove()"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 74,
+      "level": "L5",
+      "question": "JS: object keys (missing line):\nlet person = { name: \"John\", age: 30, city: \"New York\" };\n// MISSING LINE\nconsole.log(\"Keys: \" + keys);",
+      "choices": [
+        "let keys = Object.keys(person);",
+        "let keys = person.keys();",
+        "let keys = person.getKeys();",
+        "let keys = keys(person);"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 75,
+      "level": "L5",
+      "question": "JS: word count (missing line):\nlet sentence = \"JavaScript is awesome\";\n// MISSING LINE\nconsole.log(\"Word count: \" + count);",
+      "choices": [
+        "let count = sentence.length;",
+        "let count = sentence.split(\" \").length;",
+        "let count = sentence.count();",
+        "let count = sentence.words();"
+      ],
+      "correctIndex": 1
+    }
+  ]
+}

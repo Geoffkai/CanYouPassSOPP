@@ -1,6 +1,6 @@
-package src.logic.characters;
+package logic.characters;
 
-import src.logic.Question;
+import logic.Question;
 
 public abstract class Classmate {
     private String name;

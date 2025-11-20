@@ -1,9 +1,9 @@
-package src.gui;
+package gui;
 
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import src.logic.data.Record;
+import logic.data.Record;
 import java.util.List;
 
 public class SchoolRecordPanel extends JPanel {

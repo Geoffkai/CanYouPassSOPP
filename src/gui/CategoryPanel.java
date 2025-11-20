@@ -1,11 +1,11 @@
-package src.gui;
+package gui;
 
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.*;
-import src.logic.Player;
-import src.logic.QuestionBank;
+import logic.Player;
+import logic.QuestionBank;
 
 public class CategoryPanel extends JPanel {
     BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/InitialImg/Category.png");

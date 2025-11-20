@@ -1,11 +1,13 @@
-package src.logic;
+package logic;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class QuestionBank {
     public enum Category {
@@ -18,24 +20,47 @@ public class QuestionBank {
         activeQuestions.clear();
 
         String fileName = (category == Category.Theoretical)
-                ? "C:/Users/LENOVO/OneDrive/Dokumen/2nd 1st/CMSC 13/Machine Problem Files/theoretical_questions.csv"
-                : "C:/Users/LENOVO/OneDrive/Dokumen/2nd 1st/CMSC 13/Machine Problem Files/programming_questions.csv";
+                ? "theoretical.json"
+                : "programming.json";
 
         try (
 
-                BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            br.readLine();
-            while ((line = br.readLine()) != null) {
-                String data[] = line.split(",", -1);
+                FileReader fr = new FileReader(fileName)) {
+            // Read the JSON file and convert it to a string, then later icoconvert to
+            // JSONObject which is readable by the program
+            StringBuilder jsonContent = new StringBuilder();
+            int character;
+            // Ito na yung loop to convert the json file to a string
+            while ((character = fr.read()) != -1) {
+                jsonContent.append((char) character);
+            }
 
-                String question = data[0].trim();
-                String[] choices = { data[1].trim(), data[2].trim(), data[3].trim(), data[4].trim() };
-                int correctIndex = Integer.parseInt(data[5].trim());
-                String difficulty = data[6].trim();
+            // Parse the JSON
+            JSONObject jsonObject = new JSONObject(jsonContent.toString());
 
-                Question q = new Question("Procedural", question, choices, correctIndex, difficulty);
-                activeQuestions.add(q);
+            // Iterate through the topics, each topic is a key in the json object
+            for (String topic : jsonObject.keySet()) {
+                // Ito hawak nito yung array of questions for the topic
+                JSONArray questionsArray = jsonObject.getJSONArray(topic);
+
+                // Iterate through the questions in the topic
+                for (int i = 0; i < questionsArray.length(); i++) {
+                    JSONObject questionObject = questionsArray.getJSONObject(i);
+
+                    // Extract the data from the questions array
+                    String questionText = questionObject.getString("question");
+                    JSONArray choicesArray = questionObject.getJSONArray("choices");
+                    String[] choices = new String[choicesArray.length()];
+                    for (int j = 0; j < choicesArray.length(); j++) {
+                        choices[j] = choicesArray.getString(j);
+                    }
+                    int correctIndex = questionObject.getInt("correctIndex");
+                    String difficulty = questionObject.getString("level");
+
+                    // Create the question base from the JSON
+                    Question q = new Question(topic, questionText, choices, correctIndex, difficulty);
+                    activeQuestions.add(q);
+                }
             }
             System.out.println("[QuestionBank] Loaded " + activeQuestions.size() + " questions from "
                     + fileName);

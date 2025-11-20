@@ -1,4 +1,4 @@
-package src.logic.data;
+package logic.data;
 
 public class Scoreboard {
 

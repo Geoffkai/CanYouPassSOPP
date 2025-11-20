@@ -1,4 +1,4 @@
-package src.logic;
+package logic;
 
 public class Player {
     private String username;

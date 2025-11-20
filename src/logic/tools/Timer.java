@@ -1,4 +1,4 @@
-package src.logic.tools;
+package logic.tools;
 
 public class Timer {
 

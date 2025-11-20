@@ -1,4 +1,4 @@
-package src.logic.characters;
+package logic.characters;
 
 public class Elmer extends Classmate {
     public Elmer() {
