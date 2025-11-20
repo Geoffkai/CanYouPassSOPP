@@ -37,6 +37,7 @@ public class GameState {
     public static ImageIcon getTopicIcon() {
         return topicIcon;
     }
+
     public static String getCharacter() {
         return selectedCharacter;
     }
