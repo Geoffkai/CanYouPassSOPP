@@ -1,6 +1,7 @@
 package gui;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+
 import logic.GameManager;
 import logic.Player;
 import logic.QuestionBank;
@@ -58,6 +59,10 @@ public class GameState {
         selectedTopic = topic;
     }
 
+    public static String getTopic() {
+        return selectedTopic;
+    }
+
     // Player management
     public static Player getPlayer() {
         return currentPlayer;
@@ -97,7 +102,7 @@ public class GameState {
             return Elmer;
         } else if ("Merry".equals(characterName)) {
             return Merry;
-        }else{
+        } else {
             return null;
         }
     }

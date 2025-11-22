@@ -1,12 +1,23 @@
 package gui;
 
-import java.awt.*;
-import java.util.List;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javax.swing.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import logic.GameManager;
+import logic.Question;
+import logic.QuestionBank;
+import logic.Player;
 
 public class TopicsPanel extends JPanel {
 
@@ -19,7 +30,6 @@ public class TopicsPanel extends JPanel {
 
     // Storage for icons
     Map<String, ImageIcon> icons = new HashMap<>();
-
 
     // Storage for selected topics for buttons
     String level5aTopic, level5bTopic;
@@ -62,12 +72,39 @@ public class TopicsPanel extends JPanel {
             }
         }
 
-        // Assign random icons + topics
-        assignRandomIcons(Level5a, Level5b, 5);
-        assignRandomIcons(Level4a, Level4b, 4);
-        assignRandomIcons(Level3a, Level3b, 3);
-        assignRandomIcons(Level2a, Level2b, 2);
-        assignRandomIcons(Level1a, Level1b, 1);
+        // If a GameManager already exists (from previous screens), reuse it; otherwise create one
+        logic.GameManager gm = GameState.getGameManager();
+        if (gm == null) {
+            // Create a temporary GameManager so we can derive the topics for TopicsPanel
+            logic.QuestionBank bank = new logic.QuestionBank();
+            logic.Player player = GameState.getPlayer();
+            gm = new logic.GameManager(bank, player);
+            // initialize using selected category if present
+            logic.QuestionBank.Category cat = GameState.getCategory();
+            if (cat != null) {
+                gm.initializeGame(cat);
+            } else {
+                gm.initializeGame(logic.QuestionBank.Category.Theoretical);
+            }
+            // store so GameScreen reuses the same question selection
+            GameState.setGameManager(gm);
+        }
+
+        // Get the available questions (should be 10: 2 per level L1-L5)
+        java.util.List<logic.Question> selected = gm.getAvailableQuestions();
+
+        // Group questions by level
+        java.util.Map<String, java.util.List<logic.Question>> byLevel = new java.util.HashMap<>();
+        for (logic.Question q : selected) {
+            byLevel.computeIfAbsent(q.getDifficulty(), k -> new java.util.ArrayList<>()).add(q);
+        }
+
+        // For each level, pick up to two topics from selected questions; fallback to random if missing
+        assignTopicsFromQuestions(Level5a, Level5b, 5, byLevel);
+        assignTopicsFromQuestions(Level4a, Level4b, 4, byLevel);
+        assignTopicsFromQuestions(Level3a, Level3b, 3, byLevel);
+        assignTopicsFromQuestions(Level2a, Level2b, 2, byLevel);
+        assignTopicsFromQuestions(Level1a, Level1b, 1, byLevel);
 
         // Set button bounds
         setButtonPositions();
@@ -76,11 +113,16 @@ public class TopicsPanel extends JPanel {
         addListeners();
 
         // Add components
-        add(Level5a); add(Level5b);
-        add(Level4a); add(Level4b);
-        add(Level3a); add(Level3b);
-        add(Level2a); add(Level2b);
-        add(Level1a); add(Level1b);
+        add(Level5a);
+        add(Level5b);
+        add(Level4a);
+        add(Level4b);
+        add(Level3a);
+        add(Level3b);
+        add(Level2a);
+        add(Level2b);
+        add(Level1a);
+        add(Level1b);
 
         add(backgroundPanel);
         validate();
@@ -114,28 +156,136 @@ public class TopicsPanel extends JPanel {
         // Save topics into variables
         switch (level) {
             case 5: {
-                level5aTopic = topicA; level5bTopic = topicB;
+                level5aTopic = topicA;
+                level5bTopic = topicB;
                 break;
             }
             case 4: {
-                level4aTopic = topicA; level4bTopic = topicB;
+                level4aTopic = topicA;
+                level4bTopic = topicB;
                 break;
             }
             case 3: {
-                level3aTopic = topicA; level3bTopic = topicB;
+                level3aTopic = topicA;
+                level3bTopic = topicB;
                 break;
             }
             case 2: {
-                level2aTopic = topicA; level2bTopic = topicB;
+                level2aTopic = topicA;
+                level2bTopic = topicB;
                 break;
             }
             case 1: {
-                level1aTopic = topicA; level1bTopic = topicB;
+                level1aTopic = topicA;
+                level1bTopic = topicB;
                 break;
             }
             default:
                 break;
         }
+    }
+
+    private void assignTopicsFromQuestions(JButton a, JButton b, int level,
+            java.util.Map<String, java.util.List<Question>> byLevel) {
+        String levelKey = "L" + level;
+        java.util.List<Question> list = byLevel.getOrDefault(levelKey, new java.util.ArrayList<>());
+
+        if (list.size() >= 2) {
+            Question q1 = list.get(0);
+            Question q2 = list.get(1);
+            String abbr1 = mapTopicNameToAbbrev(q1.getTopic());
+            String abbr2 = mapTopicNameToAbbrev(q2.getTopic());
+            String key1 = abbr1 + level;
+            String key2 = abbr2 + level;
+            a.setIcon(icons.getOrDefault(key1, icons.get(randomKeysForLevel(level).get(0))));
+            b.setIcon(icons.getOrDefault(key2, icons.get(randomKeysForLevel(level).get(1))));
+            switch (level) {
+            case 5:
+                level5aTopic = key1;
+                level5bTopic = key2;
+                break;
+            case 4:
+                level4aTopic = key1;
+                level4bTopic = key2;
+                break;
+            case 3:
+                level3aTopic = key1;
+                level3bTopic = key2;
+                break;
+            case 2:
+                level2aTopic = key1;
+                level2bTopic = key2;
+                break;
+            case 1:
+                level1aTopic = key1;
+                level1bTopic = key2;
+                break;
+            }
+        } else if (list.size() == 1) {
+            Question q1 = list.get(0);
+            String abbr1 = mapTopicNameToAbbrev(q1.getTopic());
+            String key1 = abbr1 + level;
+            a.setIcon(icons.getOrDefault(key1, icons.get(randomKeysForLevel(level).get(0))));
+            // pick a random other key for the second button
+            List<String> keys = randomKeysForLevel(level);
+            String key2 = keys.get(0).equals(key1) ? keys.get(1) : keys.get(0);
+            b.setIcon(icons.get(key2));
+            switch (level) {
+            case 5:
+                level5aTopic = key1;
+                level5bTopic = key2;
+                break;
+            case 4:
+                level4aTopic = key1;
+                level4bTopic = key2;
+                break;
+            case 3:
+                level3aTopic = key1;
+                level3bTopic = key2;
+                break;
+            case 2:
+                level2aTopic = key1;
+                level2bTopic = key2;
+                break;
+            case 1:
+                level1aTopic = key1;
+                level1bTopic = key2;
+                break;
+            }
+        } else {
+            // no selected questions for this level — fallback to random
+            assignRandomIcons(a, b, level);
+        }
+    }
+
+    private String mapTopicNameToAbbrev(String topicName) {
+        if (topicName == null) {
+            return "Prod"; // default
+        }
+        String t = topicName.toLowerCase();
+        if (t.contains("procedur") || t.contains("procedural")) {
+            return "Prod";
+        }
+        if (t.contains("functional") || t.contains("func")) {
+            return "Func";
+        }
+        if (t.contains("object") || t.contains("object-oriented")) {
+            return "OOP";
+        }
+        if (t.contains("introduction") || t.contains("intro")) {
+            return "Intro";
+        }
+        if (t.contains("event") || t.contains("evdr") || t.contains("event-driven")) {
+            return "EVDR";
+        }
+        if (t.contains("imperative") || t.contains("declarative") || t.contains("ivd")) {
+            return "IVD";
+        }
+        if (t.contains("component") || t.contains("mapping") || t.contains("map")) {
+            return "MAP";
+        }
+        // fallback
+        return "Prod";
     }
 
     private void openGameScreen(JButton btn) {

@@ -1,7 +1,12 @@
 package gui;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 public class BackgroundPanel extends JPanel {
     private Image background;

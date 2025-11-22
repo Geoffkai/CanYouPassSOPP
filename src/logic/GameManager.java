@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import logic.characters.Classmate;
 import logic.data.Record;
 import logic.tools.DebugTools;
@@ -41,6 +42,10 @@ public class GameManager {
         this.chosenCategory = category;
         this.questionBank.loadCategory(category);
         this.isGameActive = true;
+        // Reset and load questions for the new category
+        this.availableQuestions.clear();
+        this.debugToolsUsage.clear();
+        initializeDebugTools();
         loadQuestions();
     }
 
@@ -60,7 +65,7 @@ public class GameManager {
     // Get question by topic code (e.g., "Prod5", "Func1", etc.)
     public Question getQuestionByTopicCode(String topicCode) {
         // Parse topic code to get difficulty (last character) and topic prefix
-        if (topicCode.length() < 2) {
+        if (topicCode == null || topicCode.length() < 2) {
             return null;
         }
 
@@ -69,6 +74,15 @@ public class GameManager {
 
         // Map topic prefixes to full topic names
         String topicName = mapTopicPrefixToName(topicPrefix);
+
+        // If we already have a current question that matches the requested topic+level,
+        // return it to avoid picking a different question each time.
+        if (currentQuestion != null) {
+            if (difficulty.equals(currentQuestion.getDifficulty())
+                    && currentQuestion.getTopic().toLowerCase().contains(topicName.toLowerCase())) {
+                return currentQuestion;
+            }
+        }
 
         // Find matching question
         for (Question q : availableQuestions) {
@@ -90,22 +104,41 @@ public class GameManager {
     }
 
     private String mapTopicPrefixToName(String prefix) {
-        // Map topic codes to topic names
-        switch (prefix) {
-            case "Prod":
-                return "Procedural";
-            case "Func":
-                return "Functional";
-            case "OOP":
-                return "Object-Oriented";
-            case "Imp":
-                return "Imperative";
-            case "Dec":
-                return "Declarative";
-            case "Evdr":
-                return "Event-Driven";
-            default:
-                return prefix;
+        if (prefix == null) {
+            return "";
+        }
+
+        String p = prefix.trim().toLowerCase();
+
+        // Normalize common abbreviations used by TopicsPanel to the JSON topic keys
+        switch (p) {
+        case "prod":
+        case "procedural":
+            return "Procedural Programming";
+        case "func":
+        case "functional":
+            return "Functional Programming";
+        case "oop":
+            return "Object-Oriented Programming";
+        case "intro":
+        case "introduction to programming paradigms":
+            return "Introduction to Programming Paradigms";
+        case "evdr":
+        case "event-driven":
+            return "Event-Driven Programming";
+        case "ivd":
+        case "imp":
+        case "imperative":
+            return "Imperative vs Declarative Programming";
+        case "map":
+        case "component mappings":
+            return "Component Mappings between Programming Paradigms";
+        case "dec":
+        case "declarative":
+            return "Imperative vs Declarative Programming";
+        default:
+            // Fallback: return the raw prefix (caller will try contains comparison)
+            return prefix;
         }
     }
 
@@ -143,6 +176,11 @@ public class GameManager {
         } else {
             player.deductScore(points);
         }
+
+        // After answering, remove the question from available questions so it won't be
+        // served again and clear currentQuestion to avoid accidental reuse.
+        availableQuestions.remove(currentQuestion);
+        currentQuestion = null;
 
         return correct;
     }
@@ -257,6 +295,13 @@ public class GameManager {
         }
 
         boolean correct = debugTools.ctrlC(selectedClassmate, question);
+        // Mark the tool as used regardless of outcome
+        debugToolsUsage.put("CtrlC", true);
         return correct;
+    }
+
+    // Mark an auto-debug usage (GUI calls this when AutoDebug is triggered)
+    public void useAutoDebugTool() {
+        debugToolsUsage.put("AutoDebug", true);
     }
 }

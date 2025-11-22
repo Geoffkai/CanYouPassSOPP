@@ -1,9 +1,14 @@
 package gui;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.*;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class PlayPanel extends JPanel {
     BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/InitialImg/ClickableClassmates.png");

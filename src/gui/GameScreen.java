@@ -1,14 +1,33 @@
 package gui;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.util.List;
 import java.util.Map;
-import javax.swing.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
 import logic.GameManager;
 import logic.Player;
 import logic.Question;
 import logic.QuestionBank;
-import logic.characters.*;
+import logic.characters.Anon;
+import logic.characters.Classmate;
+import logic.characters.Elmer;
+import logic.characters.Geoff;
+import logic.characters.Merry;
+import logic.characters.Yvonne;
 import logic.tools.DebugTools;
 
 public class GameScreen extends JPanel {
@@ -24,6 +43,11 @@ public class GameScreen extends JPanel {
         private DebugTools debugTools = new DebugTools();
         private int questionsAnswered = 0;
         private static final int TOTAL_QUESTIONS = 10;
+        private JLabel choiceAText;
+        private JLabel choiceBText;
+        private JLabel choiceCText;
+        private JLabel choiceDText;
+        private String[] currentChoiceTexts = new String[4];
 
         BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/InitialImg/GameScreen.png");
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -88,7 +112,7 @@ public class GameScreen extends JPanel {
 
                 // Display Topic
                 topicLabel = new JLabel();
-                topicLabel.setBounds(556, 64, 746, 87);   // same position as labels before
+                topicLabel.setBounds(556, 64, 746, 87); // same position as labels before
                 add(topicLabel);
                 displayTopic();
 
@@ -107,6 +131,19 @@ public class GameScreen extends JPanel {
                 scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 scoreLabel.setForeground(Color.WHITE);
                 scoreLabel.setBounds(1400, 100, 400, 50);
+
+                // Choices label
+                choiceAText = createChoiceTextLabel();
+                choiceAText.setBounds(200, 580, 1200, 40);
+
+                choiceBText = createChoiceTextLabel();
+                choiceBText.setBounds(200, 630, 1200, 40);
+
+                choiceCText = createChoiceTextLabel();
+                choiceCText.setBounds(200, 680, 1200, 40);
+
+                choiceDText = createChoiceTextLabel();
+                choiceDText.setBounds(200, 730, 1200, 40);
 
                 // Compile animation label
                 compileLabel = new JLabel("", SwingConstants.CENTER);
@@ -157,7 +194,7 @@ public class GameScreen extends JPanel {
                 RetryBtn.addActionListener(e -> {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                         topFrame.setContentPane(new PlayPanel());
-                        //Add reset conditions here
+                        // Add reset conditions here
                         topFrame.validate();
                         topFrame.repaint();
                 });
@@ -180,6 +217,10 @@ public class GameScreen extends JPanel {
                 loadCurrentQuestion();
 
                 add(questionLabel);
+                add(choiceAText);
+                add(choiceBText);
+                add(choiceCText);
+                add(choiceDText);
                 add(scoreLabel);
                 add(compileLabel);
                 add(Abtn);
@@ -211,12 +252,21 @@ public class GameScreen extends JPanel {
                         return;
                 }
 
-                // Create QuestionBank and load category
-                QuestionBank bank = new QuestionBank();
+                // Reuse existing GameManager if it already matches the selected category.
+                GameManager existing = GameState.getGameManager();
+                if (existing != null && existing.getCategory() == category) {
+                        gameManager = existing;
+                } else {
+                        // Create QuestionBank and load category
+                        QuestionBank bank = new QuestionBank();
 
-                // Create GameManager
-                gameManager = new GameManager(bank, player);
-                gameManager.initializeGame(category);
+                        // Create GameManager and initialize for category (resets debug tools)
+                        gameManager = new GameManager(bank, player);
+                        gameManager.initializeGame(category);
+
+                        // Store in GameState for access by other methods
+                        GameState.setGameManager(gameManager);
+                }
 
                 // Set up classmate for debug tools
                 String characterName = GameState.getCharacter();
@@ -226,9 +276,6 @@ public class GameScreen extends JPanel {
                                 gameManager.setSelectedClassmate(classmate);
                         }
                 }
-
-                // Store in GameState for access by other methods
-                GameState.setGameManager(gameManager);
 
                 // Display character icon
                 displayCharacter();
@@ -261,7 +308,6 @@ public class GameScreen extends JPanel {
                 }
         }
 
-
         private void displayCharacter() {
                 if (characterLabel == null) {
                         return; // Safety check
@@ -280,8 +326,13 @@ public class GameScreen extends JPanel {
                         return;
                 }
 
-                // Get topic from GameState
-                String topicCode = GameState.getLevel();
+                // Get topic code (abbrev + level) from GameState (set by TopicsPanel)
+                String topicCode = GameState.getTopic();
+                // Fall back to level if topic not set (defensive)
+                if (topicCode == null) {
+                        topicCode = GameState.getLevel();
+                }
+
                 if (topicCode != null) {
                         currentQuestion = gameManager.getQuestionByTopicCode(topicCode);
                 }
@@ -298,6 +349,15 @@ public class GameScreen extends JPanel {
                 if (question != null) {
                         questionLabel.setText(formatQuestionText(question.getQuestionText()));
 
+                        // Options
+                        String[] opts = question.getOptions();
+                        currentChoiceTexts = opts; // save raw text
+
+                        choiceAText.setText(formatChoiceText("A. ", opts[0], "#333333"));
+                        choiceBText.setText(formatChoiceText("B. ", opts[1], "#333333"));
+                        choiceCText.setText(formatChoiceText("C. ", opts[2], "#333333"));
+                        choiceDText.setText(formatChoiceText("D. ", opts[3], "#333333"));
+
                         // Reset button states
                         questionAnswered = false;
                         refactorUsed = false;
@@ -305,35 +365,62 @@ public class GameScreen extends JPanel {
                         updateDebugToolButtons();
                 }
         }
+
         private String formatQuestionText(String text) {
                 // Convert literal '\n' from JSON to real newlines
                 text = text.replace("\\n", "\n");
 
-                // Replace real newlines with <br>
+                // Replace real newlines with <br> for HTML display
                 text = text.replace("\n", "<br>");
 
-                // Wrap code part in a styled box
-                String styled = ""
-                        + "<html>"
-                        + "<div style='font-family:Arial; font-size:22px; color:white; "
-                        + "text-align:center; margin-bottom:15px;'>"
-                        + "QUESTION:"
-                        + "</div>"
+                // Find the first <br> safely
+                int firstBreak = text.indexOf("<br>");
 
-                        + "<div style='font-family:Arial; font-size:18px; color:white; text-align:center; "
-                        + "margin-bottom:20px;'>"
-                        + text.split("<br>")[0]  // first line = question text
-                        + "</div>"
+                String questionPart;
+                String codePart;
 
-                        + "<div style='background:#2b2b2b; padding:15px; border-radius:10px; "
-                        + "font-family:Consolas, monospace; font-size:18px; color:#e8e8e8; "
-                        + "width:90%; margin:0 auto; text-align:left; "
-                        + "max-height:300px; overflow-y:auto;'>"
-                        + text.substring(text.indexOf("<br>") + 4) // everything after question
-                        + "</div>"
-                        + "</html>";
+                if (firstBreak == -1) {
+                        // No code section → whole thing is the question text
+                        questionPart = text;
+                        codePart = "";
+                } else {
+                        questionPart = text.substring(0, firstBreak);
+                        codePart = text.substring(firstBreak + 4);
+                }
 
-                return styled;
+                // Build code box only if codePart is not empty
+                String codeBox = "";
+                if (!codePart.isEmpty()) {
+                        codeBox = "<div style='background:#2b2b2b; padding:15px; border-radius:10px; "
+                                        + "font-family:Consolas, monospace; font-size:18px; color:#e8e8e8; width:90%; "
+                                        + "margin:0 auto; text-align:left; max-height:300px; overflow-y:auto;'>"
+                                        + codePart
+                                        + "</div>";
+                }
+
+                // Final styled HTML
+                return "<html>"
+                                + "<div style='font-family:Arial; font-size:22px; color:#333333; text-align:center; margin-bottom:15px;'>"
+                                + "QUESTION:"
+                                + "</div>"
+
+                                + "<div style='font-family:Arial; font-size:18px; color:#333333; text-align:center; margin-bottom:20px;'>"
+                                + questionPart
+                                + "</div>"
+
+                                + codeBox
+                                + "</html>";
+        }
+
+        private JLabel createChoiceTextLabel() {
+                JLabel lbl = new JLabel("", SwingConstants.LEFT);
+                lbl.setFont(new Font("Arial", Font.BOLD, 22));
+                lbl.setOpaque(false);
+                return lbl;
+        }
+
+        private String formatChoiceText(String prefix, String text, String colorHex) {
+                return "<html><span style='color:" + colorHex + ";'>" + prefix + text + "</span></html>";
         }
 
         private void submitAnswer(int choiceIndex) {
@@ -341,17 +428,59 @@ public class GameScreen extends JPanel {
                         return;
                 }
 
-
                 questionAnswered = true;
                 questionsAnswered++;
 
-
                 boolean correct = gameManager.submitAnswer(choiceIndex);
 
-                // Play sound effect
+                // Highlight choices: selected choice colored, correct one green
+                highlightChoices(choiceIndex, currentQuestion.getCorrectChoice());
+
+                // Play sound effect (placeholder)
                 playSoundEffect(correct);
+
+                // Update UI after answer
+                updateScore();
+                disableAllChoiceButtons();
+                updateDebugToolButtons();
+
+                // Brief feedback
+                JOptionPane.showMessageDialog(this, correct ? "Correct!" : "Incorrect!");
+
+                // Check if game should end or continue
+                checkGameProgress();
         }
 
+        private void highlightChoices(int selectedIndex, int correctIndex) {
+                JLabel[] labels = { choiceAText, choiceBText, choiceCText, choiceDText };
+
+                for (int i = 0; i < labels.length; i++) {
+                        String color;
+                        if (i == selectedIndex) {
+                                color = (i == correctIndex) ? "#00AA00" : "#AA0000"; // green or red
+                        } else if (i == correctIndex) {
+                                color = "#00AA00"; // correct answer green
+                        } else {
+                                color = "#333333"; // dark gray
+                        }
+                        labels[i].setText(formatChoiceText(getChoicePrefix(i), currentChoiceTexts[i], color));
+                }
+        }
+
+        private String getChoicePrefix(int index) {
+                switch (index) {
+                        case 0:
+                                return "A. ";
+                        case 1:
+                                return "B. ";
+                        case 2:
+                                return "C. ";
+                        case 3:
+                                return "D. ";
+                        default:
+                                return "";
+                }
+        }
 
         private void playSoundEffect(boolean correct) {
                 // TODO: Integrate with SoundManager when audio files are available
@@ -519,6 +648,8 @@ public class GameScreen extends JPanel {
 
                         if (classmateCorrect) {
                                 // Classmate is correct, auto-submit their answer
+                                // mark AutoDebug as used then submit
+                                gameManager.useAutoDebugTool();
                                 submitAnswer(answerIndex);
                         } else {
                                 // Classmate is wrong, but player can still answer
@@ -527,9 +658,12 @@ public class GameScreen extends JPanel {
                                                                 " suggests: "
                                                                 + currentQuestion.getOptions()[answerIndex] +
                                                                 "\n(You can still choose your own answer)");
+                                gameManager.useAutoDebugTool();
+                                updateDebugToolButtons();
                         }
                 } else {
                         // If no classmate, just submit the correct answer
+                        gameManager.useAutoDebugTool();
                         submitAnswer(currentQuestion.getCorrectChoice());
                 }
         }

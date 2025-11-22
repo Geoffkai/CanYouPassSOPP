@@ -1,7 +1,11 @@
 package gui;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 /**
  * GUI entry point for the Programming Paradigms Quiz Game.
