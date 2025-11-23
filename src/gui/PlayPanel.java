@@ -22,11 +22,11 @@ public class PlayPanel extends JPanel {
 
         String[] names = { "Geoff", "Yvonne", "Anon", "Elmer", "Merry" };
         int[][] bounds = {
-                { 66, 341, 320, 393 }, // Geoff
-                { 432, 559, 320, 363 }, // Yvonne
-                { 797, 339, 320, 389 }, // Anon
-                { 1162, 559, 325, 363 }, // Elmer
-                { 1537, 348, 320, 392 } // Merry
+                { 68, 220, 318, 586 }, // Geoff
+                { 434, 409, 318, 586 }, // Yvonne
+                { 799, 233, 318, 586 }, // Anon
+                { 1166, 405, 318, 586 }, // Elmer
+                { 1528, 227, 318, 586 } // Merry
         };
 
         for (int i = 0; i < names.length; i++) {
