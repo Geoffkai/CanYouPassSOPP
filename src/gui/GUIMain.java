@@ -1,7 +1,17 @@
-import javax.swing.*;
-import java.awt.*;
+package gui;
 
-public class Main {
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+/**
+ * GUI entry point for the Programming Paradigms Quiz Game.
+ * Called by the unified Main launcher.
+ */
+public class GUIMain {
     public static void main(String[] args) {
         System.setProperty("sun.java2d.uiScale", "1.0");
         JFrame frame = new JFrame("Game Splash Screen");
@@ -12,30 +22,32 @@ public class Main {
         frame.setSize(screenSize.width, screenSize.height);
 
         // Background panel
-        BackgroundPanel splashScreen = new BackgroundPanel("src/img/Splash.png");
+        BackgroundPanel splashScreen = new BackgroundPanel("src/img/InitialImg/Splash.png");
         splashScreen.setBounds(0, 0, screenSize.width, screenSize.height);
+        splashScreen.setLayout(null);
+        splashScreen.setOpaque(false);
+
+        // Make splash screen clickable
         splashScreen.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 frame.setContentPane(new Menu());
-                frame.revalidate();
+                frame.validate();
                 frame.repaint();
             }
         });
 
-        frame.setContentPane(splashScreen);
-        frame.pack();
-
-        // Exit button
-        frame.setLayout(null);
+        // Exit button (add to splash screen, not frame)
         JButton exitButton = new JButton("X");
         exitButton.setFocusPainted(false);
         exitButton.setBackground(Color.RED);
         exitButton.setForeground(Color.WHITE);
-        exitButton.setBounds(screenSize.width - 60, 20, 50, 50); // position top-right
+        exitButton.setBounds(screenSize.width - 60, 20, 50, 50);
         exitButton.addActionListener(e -> System.exit(0));
-        frame.add(exitButton);
+        splashScreen.add(exitButton);
 
+        frame.setContentPane(splashScreen);
+        frame.setLayout(null);
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
