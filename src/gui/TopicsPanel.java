@@ -19,6 +19,8 @@ import logic.GameManager;
 import logic.Question;
 import logic.QuestionBank;
 
+import static gui.GameState.selectedCategory;
+
 public class TopicsPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -27,7 +29,8 @@ public class TopicsPanel extends JPanel {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     // Topic names — must match your image naming conventions
-    String[] names = { "EVDR", "Func", "Intro", "IVD", "MAP", "OOP", "Prod" };
+    String[] theoNames = { "EVDR", "Func", "Intro", "IVD", "MAP", "OOP", "Prod" };
+    String[] progNames = {"CTO", "OTC", "ML"};
     int maxLevel = 5;
 
     // Storage for icons
@@ -54,6 +57,7 @@ public class TopicsPanel extends JPanel {
 
     // the GameManager for this screen
     private GameManager gm;
+    private String[] currentNames;
 
     public TopicsPanel() {
         setLayout(null);
@@ -63,6 +67,7 @@ public class TopicsPanel extends JPanel {
         backgroundPanel.setLayout(null);
 
         // Load all icons once
+        currentNames = (selectedCategory == QuestionBank.Category.Programming) ? progNames : theoNames;
         loadAllIcons();
 
         // Ensure there is a GameManager available in GameState for the chosen category
@@ -126,11 +131,42 @@ public class TopicsPanel extends JPanel {
     }
 
     private void loadAllIcons() {
+        if (selectedCategory == QuestionBank.Category.Programming) {
+            progNames = new String[]{"CTO", "OTC", "ML"};
+            // Load programming icons
+            loadProgrammingIcons();
+        } else {
+            theoNames = new String[]{"EVDR", "Func", "Intro", "IVD", "MAP", "OOP", "Prod"};
+            // Load theoretical icons
+            loadTheoreticalIcons();
+        }
+    }
+
+    private void loadProgrammingIcons() {
+        // Loop through levels and load programming icons
         for (int level = 1; level <= maxLevel; level++) {
-            for (String name : names) {
-                String key = name + level; // e.g. EVDR5
+            for (String name : progNames) {
+                String key = name + level; // e.g., CTO1, OTC1, ML1
                 String path = "src/img/Level " + level + "/" + name + " " + level + ".png";
 
+                // Load the image, scale it, and store it in the icons map
+                Image scaled = new ImageIcon(path)
+                        .getImage()
+                        .getScaledInstance(746, 93, Image.SCALE_SMOOTH);
+
+                icons.put(key, new ImageIcon(scaled));
+            }
+        }
+    }
+
+    private void loadTheoreticalIcons() {
+        // Loop through levels and load theoretical icons
+        for (int level = 1; level <= maxLevel; level++) {
+            for (String name : theoNames) {
+                String key = name + level; // e.g., EVDR1, Func1, Intro1
+                String path = "src/img/Level " + level + "/" + name + " " + level + ".png";
+
+                // Load the image, scale it, and store it in the icons map
                 Image scaled = new ImageIcon(path)
                         .getImage()
                         .getScaledInstance(746, 93, Image.SCALE_SMOOTH);
@@ -142,8 +178,9 @@ public class TopicsPanel extends JPanel {
 
     // Returns an array of two random keys for a given level
     private List<String> randomKeysForLevel(int level) {
+
         List<String> keys = new ArrayList<>();
-        for (String name : names) {
+        for (String name : currentNames) {
             keys.add(name + level);
         }
         Collections.shuffle(keys);

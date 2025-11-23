@@ -15,7 +15,7 @@ public class GameState {
     private static String selectedLevel;
     private static String selectedTopic;
     private static Player currentPlayer;
-    private static QuestionBank.Category selectedCategory;
+    protected static QuestionBank.Category selectedCategory;
     private static GameManager gameManager;
     private static Question currentQuestion;
     private static Map<String, Map<String, String>> savedTopicsByCategory = new HashMap<>();
