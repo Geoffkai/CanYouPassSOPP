@@ -52,6 +52,25 @@ public class GameState {
         topicIcon = icon;
     }
 
+    public static void resetGame() {
+
+        selectedCharacter = null;
+        selectedLevel = null;
+        selectedTopic = null;
+        selectedCategory = null;
+
+        currentPlayer = null;
+        currentQuestion = null;
+        gameManager = null;
+
+        topicIcon = null;
+
+        savedTopicsByCategory.clear();
+        usedTopicsByCategory.clear();
+        usedSlotsByCategory.clear();
+        selectedSlotForCategory.clear();
+    }
+
     public static ImageIcon getTopicIcon() {
         return topicIcon;
     }
@@ -207,4 +226,5 @@ public class GameState {
         savedTopicsByCategory.clear();
         usedTopicsByCategory.clear();
     }
+
 }
