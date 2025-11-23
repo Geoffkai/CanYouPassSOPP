@@ -56,6 +56,14 @@ public class GameManager {
             List<Question> levelQuestions = questionBank.getQuestionsByLevel("L" + i, 2);
             availableQuestions.addAll(levelQuestions);
         }
+        // Log the selected questions for debugging/verification
+        System.out.println("[GameManager] Selected questions (" + availableQuestions.size() + "):");
+        int idx = 1;
+        for (Question q : availableQuestions) {
+            String text = q.getQuestionText();
+            String preview = text.length() > 120 ? text.substring(0, 120) + "..." : text;
+            System.out.println(String.format("  %02d) [%s] %s - %s", idx++, q.getDifficulty(), q.getTopic(), preview));
+        }
     }
 
     public Classmate selectClassmate() {
@@ -69,76 +77,90 @@ public class GameManager {
             return null;
         }
 
+        // If topicCode looks like "L5" (fallback from GameScreen), just return any
+        // question of that difficulty (prefer one not currently set).
+        if (topicCode.startsWith("L") && topicCode.length() == 2) {
+            String difficulty = topicCode; // e.g. "L5"
+            // Try to find a question of this difficulty that is not the currentQuestion
+            for (Question q : availableQuestions) {
+                if (q.getDifficulty().equals(difficulty) && q != currentQuestion) {
+                    currentQuestion = q;
+                    return q;
+                }
+            }
+            // Fallback: return any with matching difficulty
+            for (Question q : availableQuestions) {
+                if (q.getDifficulty().equals(difficulty)) {
+                    currentQuestion = q;
+                    return q;
+                }
+            }
+            return currentQuestion;
+        }
+
+        // Normal case: topicCode like "Prod5" or "Func3"
         String difficulty = "L" + topicCode.substring(topicCode.length() - 1);
         String topicPrefix = topicCode.substring(0, topicCode.length() - 1);
-
-        // Map topic prefixes to full topic names
         String topicName = mapTopicPrefixToName(topicPrefix);
 
-        // If we already have a current question that matches the requested topic+level,
-        // return it to avoid picking a different question each time.
-        if (currentQuestion != null) {
-            if (difficulty.equals(currentQuestion.getDifficulty())
-                    && currentQuestion.getTopic().toLowerCase().contains(topicName.toLowerCase())) {
-                return currentQuestion;
+        // Collect all matching questions for this topic+level
+        List<Question> matches = new ArrayList<>();
+        for (Question q : availableQuestions) {
+            if (q.getDifficulty().equals(difficulty)
+                    && q.getTopic() != null
+                    && q.getTopic().toLowerCase().contains(topicName.toLowerCase())) {
+                matches.add(q);
             }
         }
 
-        // Find matching question
-        for (Question q : availableQuestions) {
-            if (q.getDifficulty().equals(difficulty) && q.getTopic().toLowerCase().contains(topicName.toLowerCase())) {
+        // Prefer a match that is not the currentQuestion (so two buttons don't get the
+        // same instance)
+        for (Question q : matches) {
+            if (q != currentQuestion) {
                 currentQuestion = q;
                 return q;
             }
         }
 
-        // If no exact match, get any question with matching difficulty
+        // If all matches are the currentQuestion or there is only one match, return the
+        // first match
+        if (!matches.isEmpty()) {
+            currentQuestion = matches.get(0);
+            return currentQuestion;
+        }
+
+        // No topic-specific match: pick any question of the same difficulty not equal
+        // to currentQuestion
         for (Question q : availableQuestions) {
-            if (q.getDifficulty().equals(difficulty)) {
+            if (q.getDifficulty().equals(difficulty) && q != currentQuestion) {
                 currentQuestion = q;
                 return q;
             }
         }
 
-        return null;
+        // As a last resort, return whatever the currentQuestion is (could be null)
+        return currentQuestion;
     }
 
     private String mapTopicPrefixToName(String prefix) {
-        if (prefix == null) {
-            return "";
-        }
-
-        String p = prefix.trim().toLowerCase();
-
-        // Normalize common abbreviations used by TopicsPanel to the JSON topic keys
-        switch (p) {
-        case "prod":
-        case "procedural":
-            return "Procedural Programming";
-        case "func":
-        case "functional":
-            return "Functional Programming";
-        case "oop":
-            return "Object-Oriented Programming";
-        case "intro":
-        case "introduction to programming paradigms":
-            return "Introduction to Programming Paradigms";
-        case "evdr":
-        case "event-driven":
-            return "Event-Driven Programming";
-        case "ivd":
-        case "imp":
-        case "imperative":
-            return "Imperative vs Declarative Programming";
-        case "map":
-        case "component mappings":
-            return "Component Mappings between Programming Paradigms";
-        case "dec":
-        case "declarative":
-            return "Imperative vs Declarative Programming";
-        default:
-            // Fallback: return the raw prefix (caller will try contains comparison)
-            return prefix;
+        // Map topic codes to topic names
+        switch (prefix) {
+            case "Prod":
+                return "procedural";
+            case "Func":
+                return "functional";
+            case "OOP":
+                return "object";
+            case "EVDR":
+                return "event";
+            case "Intro":
+                return "intro";
+            case "IVD":
+                return "imperative"; // or declarative
+            case "MAP":
+                return "mapping";
+            default:
+                return prefix.toLowerCase();
         }
     }
 

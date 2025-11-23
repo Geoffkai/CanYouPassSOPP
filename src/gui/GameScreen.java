@@ -326,12 +326,8 @@ public class GameScreen extends JPanel {
                         return;
                 }
 
-                // Get topic code (abbrev + level) from GameState (set by TopicsPanel)
-                String topicCode = GameState.getTopic();
-                // Fall back to level if topic not set (defensive)
-                if (topicCode == null) {
-                        topicCode = GameState.getLevel();
-                }
+                // Always pull the topic code, NOT the level
+                String topicCode = GameState.getTopic(); // e.g., "Prod2"
 
                 if (topicCode != null) {
                         currentQuestion = gameManager.getQuestionByTopicCode(topicCode);
@@ -433,6 +429,21 @@ public class GameScreen extends JPanel {
 
                 boolean correct = gameManager.submitAnswer(choiceIndex);
 
+                // Mark the specific slot (e.g. "2a") used for the category so only that
+                // button is disabled next time. TopicsPanel sets the selected slot when
+                // opening the topic.
+                String catKey = GameState.getCategoryKey();
+                String slot = GameState.getSelectedSlotForCategory(catKey);
+                if (slot != null) {
+                        GameState.markSlotUsedForCategory(catKey, slot);
+                } else {
+                        // Fallback: mark topic code as used if slot information isn't available
+                        String topicCode = GameState.getTopic();
+                        if (topicCode != null) {
+                                GameState.markTopicUsedForCategory(catKey, topicCode);
+                        }
+                }
+
                 // Highlight choices: selected choice colored, correct one green
                 highlightChoices(choiceIndex, currentQuestion.getCorrectChoice());
 
@@ -445,7 +456,7 @@ public class GameScreen extends JPanel {
                 updateDebugToolButtons();
 
                 // Brief feedback
-                JOptionPane.showMessageDialog(this, correct ? "Correct!" : "Incorrect!");
+                javax.swing.JOptionPane.showMessageDialog(this, correct ? "Correct!" : "Incorrect!");
 
                 // Check if game should end or continue
                 checkGameProgress();
