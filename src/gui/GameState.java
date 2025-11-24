@@ -52,6 +52,25 @@ public class GameState {
         topicIcon = icon;
     }
 
+    public static void resetGame() {
+
+        selectedCharacter = null;
+        selectedLevel = null;
+        selectedTopic = null;
+        selectedCategory = null;
+
+        currentPlayer = null;
+        currentQuestion = null;
+        gameManager = null;
+
+        topicIcon = null;
+
+        savedTopicsByCategory.clear();
+        usedTopicsByCategory.clear();
+        usedSlotsByCategory.clear();
+        selectedSlotForCategory.clear();
+    }
+
     public static ImageIcon getTopicIcon() {
         return topicIcon;
     }
@@ -206,5 +225,29 @@ public class GameState {
     public static void clearAllSavedTopicsAndUsed() {
         savedTopicsByCategory.clear();
         usedTopicsByCategory.clear();
+    }
+
+    public static QuestionBank.Category getNextCategory() {
+        // If current is Theoretical and it is finished → go to Programming
+        if (selectedCategory == QuestionBank.Category.Theoretical) {
+            return QuestionBank.Category.Programming;
+        }
+
+        // If current is Programming and it is finished → go to Theoretical
+        if (selectedCategory == QuestionBank.Category.Programming) {
+            return QuestionBank.Category.Theoretical;
+        }
+
+        return null; // nothing else
+    }
+
+    public static void clearCategoryState(String categoryKey) {
+        if (categoryKey == null)
+            return;
+
+        savedTopicsByCategory.remove(categoryKey);
+        usedTopicsByCategory.remove(categoryKey);
+        usedSlotsByCategory.remove(categoryKey);
+        selectedSlotForCategory.remove(categoryKey);
     }
 }

@@ -63,6 +63,7 @@ public class GameManager {
             String text = q.getQuestionText();
             String preview = text.length() > 120 ? text.substring(0, 120) + "..." : text;
             System.out.println(String.format("  %02d) [%s] %s - %s", idx++, q.getDifficulty(), q.getTopic(), preview));
+            System.out.println(q.getCorrectChoice());
         }
     }
 
