@@ -216,7 +216,7 @@ public class GameScreen extends JPanel {
                 MuteBtn.addActionListener(e -> toggleMute());
 
                 display();
-
+                questionsAnswered = 0;
                 // Load and display current question
                 loadCurrentQuestion();
 
@@ -472,8 +472,8 @@ public class GameScreen extends JPanel {
                 updateScore();
                 disableAllChoiceButtons();
                 updateDebugToolButtons();
-
                 Return.setEnabled(true);
+
                 // Brief feedback
                 javax.swing.JOptionPane.showMessageDialog(this, correct ? "Correct!" : "Incorrect!");
 
@@ -519,15 +519,56 @@ public class GameScreen extends JPanel {
 
         private void checkGameProgress() {
                 Player player = gameManager.getPlayer();
-                int correctCount = player != null ? player.getCorrectCount() : 0;
+                int correctCount = (player != null) ? player.getCorrectCount() : 0;
 
-                // Check if all questions are answered
+                // Check if finished the current category
                 if (questionsAnswered >= TOTAL_QUESTIONS) {
-                        // Check if player won (all correct)
-                        boolean won = (correctCount == TOTAL_QUESTIONS);
+
+                        // Identify the next category
+                        QuestionBank.Category next = GameState.getNextCategory();
+
+                        // CASE 1 — There IS a next category
+                        if (next != null && next != GameState.getCategory()) {
+
+                                String finishedCatKey = GameState.getCategoryKey();
+                                GameState.clearCategoryState(finishedCatKey);
+
+                                // Move to the next category
+                                GameState.setCategory(next);
+
+                                // IMPORTANT FIX:
+                                // Clear next category before entering TopicsPanel
+                                // so all buttons are enabled again
+                                GameState.clearCategoryState(next.name());
+
+                                // Create a fresh GameManager for the new category
+                                QuestionBank bank = new QuestionBank();
+                                gameManager = new GameManager(bank, player);
+                                gameManager.initializeGame(next);
+                                GameState.setGameManager(gameManager);
+
+                                // Reset state
+                                questionsAnswered = 0;
+                                questionAnswered = false;
+                                refactorUsed = false;
+                                refactorChoices = null;
+
+                                JOptionPane.showMessageDialog(this,
+                                                "You finished the " + finishedCatKey + " category!\n"
+                                                                + "Proceeding to the next category...");
+
+                                // Go back to TopicsPanel
+                                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                                topFrame.setContentPane(new TopicsPanel());
+                                topFrame.validate();
+                                topFrame.repaint();
+
+                                return;
+                        }
+
+                        // CASE 2 — No next category → Game Over
+                        boolean won = (correctCount == TOTAL_QUESTIONS * 2);
                         endGame(won);
-                } else {
-                        // Return to topics for next question
                 }
         }
 
@@ -599,7 +640,7 @@ public class GameScreen extends JPanel {
                                         Abtn.setEnabled(true);
                                         break;
                                 case 1:
-                                        Abtn.setEnabled(true);
+                                        Bbtn.setEnabled(true);
                                         break;
                                 case 2:
                                         Cbtn.setEnabled(true);
@@ -704,6 +745,7 @@ public class GameScreen extends JPanel {
 
                 JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                 if (topFrame != null) {
+                        questionsAnswered = 0;
                         topFrame.setContentPane(new TopicsPanel());
                         topFrame.validate();
                         topFrame.repaint();
