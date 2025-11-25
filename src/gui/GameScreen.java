@@ -1,23 +1,13 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Toolkit;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
+import javax.swing.*;
 
+import gui.Main;
 import logic.GameManager;
 import logic.Player;
 import logic.Question;
@@ -102,6 +92,21 @@ public class GameScreen extends JPanel {
                         java.awt.Image.SCALE_SMOOTH));
         JButton MuteBtn = new JButton(Mute);
 
+        ImageIcon MR = new ImageIcon(new ImageIcon("src/img/Feedback/MainRed.png").getImage().getScaledInstance(595, 97,
+                java.awt.Image.SCALE_SMOOTH));
+        JButton MainRed = new JButton(MR);
+
+        ImageIcon PR = new ImageIcon(new ImageIcon("src/img/Feedback/PlayRed.png").getImage().getScaledInstance(595, 97,
+                java.awt.Image.SCALE_SMOOTH));
+        JButton PlayRed = new JButton(PR);
+        ImageIcon MB = new ImageIcon(new ImageIcon("src/img/Feedback/MainBlue.png").getImage().getScaledInstance(595, 97,
+                java.awt.Image.SCALE_SMOOTH));
+        JButton MainBlue = new JButton(MB);
+
+        ImageIcon PB = new ImageIcon(new ImageIcon("src/img/Feedback/PlayBlue.png").getImage().getScaledInstance(595, 97,
+                java.awt.Image.SCALE_SMOOTH));
+        JButton PlayBlue = new JButton(PB);
+
         private JLabel topicLabel;
         JPanel character = new JPanel();
 
@@ -128,8 +133,8 @@ public class GameScreen extends JPanel {
                 questionLabel.setOpaque(false);
                 questionLabel.setBounds(200, 250, 1200, 300);
 
-                scoreLabel = new JLabel("Score: 0", SwingConstants.RIGHT);
-                scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                scoreLabel = new JLabel("SCORE: 0", SwingConstants.RIGHT);
+                scoreLabel.setFont(new Font("Arial", Font.BOLD, 35));
                 scoreLabel.setForeground(Color.WHITE);
                 scoreLabel.setBounds(1400, 100, 400, 50);
 
@@ -245,6 +250,7 @@ public class GameScreen extends JPanel {
                 validate();
                 repaint();
         }
+
 
         private void initializeGameManager() {
                 // Get Player and Category from GameState
@@ -475,10 +481,155 @@ public class GameScreen extends JPanel {
                 Return.setEnabled(true);
 
                 // Brief feedback
-                javax.swing.JOptionPane.showMessageDialog(this, correct ? "Correct!" : "Incorrect!");
+                showCustomFeedback(correct);
 
                 // Check if game should end or continue
                 checkGameProgress();
+        }
+
+
+        private void showCustomFeedback(boolean correct) {
+                // Load both feedback images
+                String firstImagePath = correct ? "src/img/Feedback/CorrectAnswer.png" : "src/img/Feedback/WrongAnswer.png";
+                String secondImagePath = correct ? "src/img/Feedback/CurrentScore.png" : "src/img/Feedback/YouFail.png";
+
+                ImageIcon firstIcon = new ImageIcon(firstImagePath);
+                ImageIcon secondIcon = new ImageIcon(secondImagePath);
+
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+                // Create overlay panel that covers everything
+                JPanel overlayPanel = new JPanel(null);
+                overlayPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+                overlayPanel.setOpaque(true);
+                overlayPanel.setBackground(Color.BLACK); // or match your background
+
+                // Labels for username and score
+                Player player = gameManager.getPlayer();
+                JLabel user = new JLabel(player.getUsername());
+                user.setForeground(new Color(255, 230, 66));
+                user.setHorizontalAlignment(JLabel.CENTER);
+                user.setVisible(false);
+
+                JLabel score = new JLabel(String.valueOf(player.getScore()));
+                score.setForeground(Color.WHITE);
+                score.setHorizontalAlignment(JLabel.CENTER);
+                score.setVisible(false);
+
+                overlayPanel.add(user);
+                overlayPanel.add(score);
+
+                // Setup buttons based on correct/incorrect
+                JButton mainButton = correct ? new JButton(MainBlue.getIcon()) : new JButton(MainRed.getIcon());
+                JButton playButton = correct ? new JButton(PlayBlue.getIcon()) : new JButton(PlayRed.getIcon());
+
+                mainButton.setBounds(662, 758, 595, 97);
+                mainButton.addActionListener(e -> {
+                        // Remove overlay first
+                        JLayeredPane layeredPane = topFrame.getLayeredPane();
+                        layeredPane.remove(overlayPanel);
+                        layeredPane.revalidate();
+                        layeredPane.repaint();
+
+                        GameState.resetGame();
+                        topFrame.setContentPane(new Menu());
+                        topFrame.revalidate();
+                        topFrame.repaint();
+                });
+
+                playButton.setBounds(662, 917, 595, 97);
+                playButton.addActionListener(e -> {
+                        // Remove overlay first
+                        JLayeredPane layeredPane = topFrame.getLayeredPane();
+                        layeredPane.remove(overlayPanel);
+                        layeredPane.revalidate();
+                        layeredPane.repaint();
+
+                        GameState.resetGame();
+                        topFrame.setContentPane(new PlayPanel());
+                        topFrame.revalidate();
+                        topFrame.repaint();
+                });
+
+                mainButton.setVisible(false);
+                playButton.setVisible(false);
+
+                overlayPanel.add(mainButton);
+                overlayPanel.add(playButton);
+
+                // Create label with the first image - center it
+                JLabel imageLabel = new JLabel(firstIcon);
+                int x = (screenSize.width - firstIcon.getIconWidth()) / 2;
+                int y = (screenSize.height - firstIcon.getIconHeight()) / 2;
+                imageLabel.setBounds(x, y, firstIcon.getIconWidth(), firstIcon.getIconHeight());
+                imageLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+                // Track which stage we're on
+                final boolean[] isFirstImage = {true};
+
+                // Add click listener to swap images
+                imageLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+                        @Override
+                        public void mouseClicked(java.awt.event.MouseEvent e) {
+                                if (isFirstImage[0]) {
+                                        // First click: swap to second image
+                                        imageLabel.setIcon(secondIcon);
+
+                                        // Show username and score
+                                        user.setVisible(true);
+                                        score.setVisible(true);
+
+                                        if (correct) {
+                                                // Correct answer layout
+                                                user.setBounds(730, 707, 387, 64);
+                                                user.setFont(new Font("Arial", Font.BOLD, 40));
+                                                score.setBounds(849, 846, 150, 57);
+                                                score.setFont(new Font("Arial", Font.BOLD, 35));
+                                        } else {
+                                                // Incorrect answer layout
+                                                user.setBounds(766, 540, 387, 63);
+                                                user.setFont(new Font("Arial", Font.BOLD, 45));
+                                                score.setBounds(858, 624, 203, 64);
+                                                score.setFont(new Font("Arial", Font.BOLD, 40));
+
+                                                // Show buttons (adjust positions)
+                                                mainButton.setBounds(662, 758, 595, 97);
+                                                playButton.setBounds(662, 917, 595, 97);
+                                                mainButton.setVisible(true);
+                                                playButton.setVisible(true);
+
+                                                // Disable clicking on image - only buttons should work
+                                                imageLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                                                imageLabel.removeMouseListener(this);
+                                        }
+
+                                        overlayPanel.revalidate();
+                                        overlayPanel.repaint();
+
+                                        isFirstImage[0] = false;
+                                } else if (correct) {
+                                        // Second click (only for correct answers): transition to TopicsPanel
+                                        // Remove overlay first
+                                        JLayeredPane layeredPane = topFrame.getLayeredPane();
+                                        layeredPane.remove(overlayPanel);
+                                        layeredPane.revalidate();
+                                        layeredPane.repaint();
+
+                                        topFrame.setContentPane(new TopicsPanel());
+                                        topFrame.revalidate();
+                                        topFrame.repaint();
+                                }
+                        }
+                });
+
+                overlayPanel.add(imageLabel);
+
+                // Add overlay on top of everything using JLayeredPane
+                JLayeredPane layeredPane = topFrame.getLayeredPane();
+                layeredPane.add(overlayPanel, JLayeredPane.POPUP_LAYER);
+
+                overlayPanel.revalidate();
+                overlayPanel.repaint();
         }
 
         private void highlightChoices(int selectedIndex, int correctIndex) {
