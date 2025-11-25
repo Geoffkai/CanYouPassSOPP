@@ -44,7 +44,7 @@ public class GameScreen extends JPanel {
         private DebugTools debugTools = new DebugTools();
         private static int questionsAnswered = 0; // ⭐ STATIC so it persists across GameScreen instances
         private static int consecutiveCorrectAnswers = 0; // ⭐ Track consecutive correct answers for winning condition
-        private static final int TOTAL_QUESTIONS = 10;
+        private static final int TOTAL_QUESTIONS = 20;
         private boolean answeredWrong = false; // Track if player answered wrong (can be saved by AutoDebug)
         private int lastQuestionPoints = 0; // Store points from last question for AutoDebug restoration
         private JLabel choiceAText;
@@ -491,7 +491,6 @@ public class GameScreen extends JPanel {
 
                         // Mark as correct
                         correct = true;
-                        consecutiveCorrectAnswers++;
                         answeredWrong = false;
 
                         System.out.println("[GameScreen] AutoDebug auto-saved! Marked as correct. Consecutive: "
@@ -541,7 +540,7 @@ public class GameScreen extends JPanel {
                 final boolean finalCorrect = correct;
 
                 // Add 3 second delay before showing feedback panel
-                Timer feedbackTimer = new Timer(3000, e -> {
+                Timer feedbackTimer = new Timer(0, e -> {
                         hideCompilingAnimation();
                         showCustomFeedback(finalCorrect);
                         // Check game progress after feedback is shown (will be triggered by feedback
@@ -794,7 +793,7 @@ public class GameScreen extends JPanel {
                 System.out.println("[GameScreen] checkGameProgress: questionsAnswered=" + questionsAnswered
                                 + ", TOTAL_QUESTIONS=" + TOTAL_QUESTIONS);
 
-                if (questionsAnswered >= TOTAL_QUESTIONS) {
+                if (questionsAnswered == TOTAL_QUESTIONS - 10 && correctCount == 10) {
                         System.out.println("[GameScreen] ✓ Finished 10 questions");
 
                         // identify next category
@@ -806,56 +805,179 @@ public class GameScreen extends JPanel {
                         if (next != null && next != GameState.getCategory()) {
                                 System.out.println("[GameScreen] ✓ Finished category, moving to TopicsPanel");
 
-                                // Notify player
-                                JOptionPane.showMessageDialog(this,
-                                                "You finished the " + GameState.getCategory().name() + " category!\n"
-                                                                + "Now proceeding to " + next.name() + "!");
-
-                                // SWITCH category
-                                GameState.setCategory(next);
-
-                                // Reset counter for the new category
-                                questionsAnswered = 0;
-                                questionAnswered = false;
-
-                                // Go to TopicsPanel to let user choose a topic in the next category
-                                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-                                topFrame.setContentPane(new TopicsPanel());
-                                topFrame.validate();
-                                topFrame.repaint();
-                                return;
+                                showCategoryCompletionOverlay(next);
                         }
-
+                }else if(questionsAnswered == TOTAL_QUESTIONS && consecutiveCorrectAnswers == TOTAL_QUESTIONS){
                         // CASE 2 — no next category, game ends
                         // Player wins only if they answered all 20 questions consecutively correct (10
                         // per category)
-                        boolean won = (consecutiveCorrectAnswers == TOTAL_QUESTIONS * 2);
+                        boolean won = true;
                         System.out.println("[GameScreen] Game Over! Consecutive correct: " + consecutiveCorrectAnswers
-                                        + ", Won: " + won);
-                        endGame(won);
+                                + ", Won: " + won);
+                        endGame();
                 }
         }
 
-        private void endGame(boolean won) {
+        private void showCategoryCompletionOverlay(QuestionBank.Category nextCategory) {
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+                String imagePath;
+                QuestionBank.Category currentCategory = GameState.getCategory();
+
+                if (currentCategory == QuestionBank.Category.Theoretical) {
+                        // Finished Theoretical first
+                        imagePath = "src/img/Feedback/PassedTheoretical.png";
+                } else {
+                        // Finished Programming first
+                        imagePath = "src/img/Feedback/PassedProgramming.png";
+                }
+
+                ImageIcon completionIcon = new ImageIcon(imagePath);
+
+                JPanel overlayPanel = new JPanel(null);
+                overlayPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+                overlayPanel.setOpaque(true);
+                overlayPanel.setBackground(Color.BLACK);
+
+                // Create label with the image - center it
+                JLabel imageLabel = new JLabel(completionIcon);
+                int x = (screenSize.width - completionIcon.getIconWidth()) / 2;
+                int y = (screenSize.height - completionIcon.getIconHeight()) / 2;
+                imageLabel.setBounds(x, y, completionIcon.getIconWidth(), completionIcon.getIconHeight());
+                imageLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+                // Add click listener to switch to next category
+                imageLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+                        @Override
+                        public void mouseClicked(java.awt.event.MouseEvent e) {
+                                // Remove overlay first
+                                JLayeredPane layeredPane = topFrame.getLayeredPane();
+                                layeredPane.remove(overlayPanel);
+                                layeredPane.revalidate();
+                                layeredPane.repaint();
+
+                                // SWITCH category
+                                GameState.setCategory(nextCategory);
+
+                                // Go to TopicsPanel to let user choose a topic in the next category
+                                topFrame.setContentPane(new TopicsPanel());
+                                topFrame.revalidate();
+                                topFrame.repaint();
+                        }
+                });
+
+                overlayPanel.add(imageLabel);
+
+                // Add overlay on top of everything using JLayeredPane
+                JLayeredPane layeredPane = topFrame.getLayeredPane();
+                layeredPane.add(overlayPanel, JLayeredPane.POPUP_LAYER);
+
+                overlayPanel.revalidate();
+                overlayPanel.repaint();
+        }
+
+        private void endGame() {
                 // Save record before ending
                 if (gameManager != null) {
                         gameManager.endGame();
                 }
 
                 Player player = gameManager != null ? gameManager.getPlayer() : null;
-                int correctCount = player != null ? player.getCorrectCount() : 0;
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
 
-                // Show game over panel
-                Timer gameOverTimer = new Timer(500, e -> {
-                        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-                        if (topFrame != null) {
-                                topFrame.setContentPane(new GameOverPanel(player, TOTAL_QUESTIONS, correctCount, won));
-                                topFrame.validate();
-                                topFrame.repaint();
-                        }
+                // Determine which image to show based on win/lose
+                String imagePath = "src/img/Feedback/YouPass.png";
+                ImageIcon gameOverIcon = new ImageIcon(imagePath);
+
+                // Create overlay panel that covers everything
+                JPanel overlayPanel = new JPanel(null);
+                overlayPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+                overlayPanel.setOpaque(true);
+                overlayPanel.setBackground(Color.BLACK);
+
+                // Create label with the game over image - center it
+                JLabel imageLabel = new JLabel(gameOverIcon);
+                int x = (screenSize.width - gameOverIcon.getIconWidth()) / 2;
+                int y = (screenSize.height - gameOverIcon.getIconHeight()) / 2;
+                imageLabel.setBounds(x, y, gameOverIcon.getIconWidth(), gameOverIcon.getIconHeight());
+
+                overlayPanel.add(imageLabel);
+
+                // Add player info labels (username and score)
+                // Labels for username and score
+                JLabel user = new JLabel(player.getUsername());
+                user.setForeground(new Color(255, 230, 66));
+                user.setFont(new Font("Arial", Font.BOLD, 45));
+                user.setBounds(766, 540, 387, 63);
+                user.setHorizontalAlignment(JLabel.CENTER);
+                user.setVisible(true);
+
+                JLabel score = new JLabel(String.valueOf(player.getScore()));
+                score.setForeground(Color.WHITE);
+                user.setFont(new Font("Arial", Font.BOLD, 40));
+                score.setBounds(858, 624, 203, 64);
+                score.setHorizontalAlignment(JLabel.CENTER);
+                score.setVisible(true);
+
+
+                // Create Play Again button
+                JButton playAgainButton;
+                playAgainButton = new JButton(PlayBlue.getIcon());
+                playAgainButton.setBounds(662, 917, 595, 97); // Adjust position based on your image layout
+                playAgainButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                playAgainButton.addActionListener(e -> {
+                        // Remove overlay
+                        JLayeredPane layeredPane = topFrame.getLayeredPane();
+                        layeredPane.remove(overlayPanel);
+                        layeredPane.revalidate();
+                        layeredPane.repaint();
+
+                        // Reset game state
+                        questionsAnswered = 0;
+                        consecutiveCorrectAnswers = 0;
+                        GameState.resetGame();
+
+                        // Go to PlayPanel to start new game
+                        topFrame.setContentPane(new PlayPanel());
+                        topFrame.revalidate();
+                        topFrame.repaint();
                 });
-                gameOverTimer.setRepeats(false);
-                gameOverTimer.start();
+
+                // Create Main Menu button
+                JButton mainMenuButton = new JButton(MainBlue.getIcon());
+
+                mainMenuButton.setBounds(662, 758, 595, 97); // Adjust position based on your image layout
+                mainMenuButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                mainMenuButton.addActionListener(e -> {
+                        // Remove overlay
+                        JLayeredPane layeredPane = topFrame.getLayeredPane();
+                        layeredPane.remove(overlayPanel);
+                        layeredPane.revalidate();
+                        layeredPane.repaint();
+
+                        // Reset game state
+                        questionsAnswered = 0;
+                        consecutiveCorrectAnswers = 0;
+                        GameState.resetGame();
+
+                        // Go to Main Menu
+                        topFrame.setContentPane(new Menu());
+                        topFrame.revalidate();
+                        topFrame.repaint();
+                });
+
+                overlayPanel.add(playAgainButton);
+                overlayPanel.add(mainMenuButton);
+                overlayPanel.add(user);
+                overlayPanel.add(score);
+                overlayPanel.add(imageLabel);
+
+                // Add overlay on top of everything using JLayeredPane
+                JLayeredPane layeredPane = topFrame.getLayeredPane();
+                layeredPane.add(overlayPanel, JLayeredPane.POPUP_LAYER);
+
+                overlayPanel.revalidate();
+                overlayPanel.repaint();
         }
 
         private void updateScore() {
