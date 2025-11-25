@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
@@ -105,6 +106,23 @@ public class GameScreen extends JPanel {
                         java.awt.Image.SCALE_SMOOTH));
         JButton MuteBtn = new JButton(Mute);
 
+        ImageIcon MR = new ImageIcon(new ImageIcon("src/img/Feedback/MainRed.png").getImage().getScaledInstance(595, 97,
+                        java.awt.Image.SCALE_SMOOTH));
+        JButton MainRed = new JButton(MR);
+
+        ImageIcon PR = new ImageIcon(new ImageIcon("src/img/Feedback/PlayRed.png").getImage().getScaledInstance(595, 97,
+                        java.awt.Image.SCALE_SMOOTH));
+        JButton PlayRed = new JButton(PR);
+        ImageIcon MB = new ImageIcon(
+                        new ImageIcon("src/img/Feedback/MainBlue.png").getImage().getScaledInstance(595, 97,
+                                        java.awt.Image.SCALE_SMOOTH));
+        JButton MainBlue = new JButton(MB);
+
+        ImageIcon PB = new ImageIcon(
+                        new ImageIcon("src/img/Feedback/PlayBlue.png").getImage().getScaledInstance(595, 97,
+                                        java.awt.Image.SCALE_SMOOTH));
+        JButton PlayBlue = new JButton(PB);
+
         private JLabel topicLabel;
         JPanel character = new JPanel();
 
@@ -134,8 +152,8 @@ public class GameScreen extends JPanel {
                 questionLabel.setOpaque(false);
                 questionLabel.setBounds(200, 250, 1200, 300);
 
-                scoreLabel = new JLabel("Score: 0", SwingConstants.RIGHT);
-                scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                scoreLabel = new JLabel("SCORE: 0", SwingConstants.RIGHT);
+                scoreLabel.setFont(new Font("Arial", Font.BOLD, 35));
                 scoreLabel.setForeground(Color.WHITE);
                 scoreLabel.setBounds(1400, 100, 400, 50);
 
@@ -452,10 +470,37 @@ public class GameScreen extends JPanel {
 
                 System.out.println("[GameScreen] submitAnswer: questionsAnswered INCREMENTED to " + questionsAnswered);
 
-                // ⭐ Store points before submission (for AutoDebug restoration if needed)
+                // Store points before submission (for AutoDebug restoration if needed)
                 lastQuestionPoints = currentQuestion.getDifficultyPoints();
 
                 boolean correct = gameManager.submitAnswer(choiceIndex);
+
+                // Auto-save with AutoDebug if answer is wrong and AutoDebug available
+                if (!correct && gameManager.isDebugToolAvailable("AutoDebug")) {
+                        System.out.println("[GameScreen] Wrong answer but AutoDebug available! Auto-saving...");
+
+                        // Use AutoDebug automatically
+                        gameManager.useAutoDebugTool();
+
+                        // Restore points (add back double: undo deduction + add correct score)
+                        Player player = gameManager.getPlayer();
+                        if (player != null) {
+                                player.addScore(lastQuestionPoints * 2);
+                                player.incrementCorrect();
+                        }
+
+                        // Mark as correct
+                        correct = true;
+                        consecutiveCorrectAnswers++;
+                        answeredWrong = false;
+
+                        System.out.println("[GameScreen] AutoDebug auto-saved! Marked as correct. Consecutive: "
+                                        + consecutiveCorrectAnswers);
+
+                        // Show message
+                        JOptionPane.showMessageDialog(this,
+                                        "AutoDebug automatically saved you!\nQuestion marked as CORRECT and points preserved!");
+                }
 
                 // ⭐ Track consecutive correct answers for winning condition
                 if (correct) {
@@ -466,18 +511,10 @@ public class GameScreen extends JPanel {
                         System.out.println("[GameScreen] WRONG ANSWER! Resetting consecutive counter from "
                                         + consecutiveCorrectAnswers + " to 0");
                         consecutiveCorrectAnswers = 0;
-                        answeredWrong = true; // Mark that they answered wrong (can be saved by AutoDebug)
+                        answeredWrong = true;
 
-                        // ⭐ Check if AutoDebug is already used - if so, game over
-                        if (!gameManager.isDebugToolAvailable("AutoDebug")) {
-                                System.out.println("[GameScreen] GAME OVER! Wrong answer and AutoDebug already used!");
-                                highlightChoices(choiceIndex, currentQuestion.getCorrectChoice());
-                                disableAllChoiceButtons();
-                                JOptionPane.showMessageDialog(this,
-                                                "Wrong Answer! AutoDebug has already been used.\nGame Over!");
-                                endGame(false); // Player loses
-                                return;
-                        }
+                        // No AutoDebug available - game over
+                        System.out.println("[GameScreen] Wrong answer and no AutoDebug available! Ending game.");
                 }
 
                 // ⭐ Capture category BEFORE any switching, and mark slot as used
@@ -497,8 +534,221 @@ public class GameScreen extends JPanel {
                 updateDebugToolButtons();
                 Return.setEnabled(true);
 
-                JOptionPane.showMessageDialog(this, correct ? "Correct!" : "Incorrect!");
-                checkGameProgress();
+                // Show compiling animation
+                showCompilingAnimation();
+
+                // Make final for lambda
+                final boolean finalCorrect = correct;
+
+                // Add 3 second delay before showing feedback panel
+                Timer feedbackTimer = new Timer(3000, e -> {
+                        hideCompilingAnimation();
+                        showCustomFeedback(finalCorrect);
+                        // Check game progress after feedback is shown (will be triggered by feedback
+                        // panel clicks)
+                });
+                feedbackTimer.setRepeats(false);
+                feedbackTimer.start();
+        }
+
+        private void showCompilingAnimation() {
+                compileLabel.setText("Compiling...");
+                compileLabel.setVisible(true);
+
+                // Animate dots
+                Timer dotTimer = new Timer(400, null);
+                final int[] dotCount = { 0 };
+                dotTimer.addActionListener(e -> {
+                        dotCount[0] = (dotCount[0] + 1) % 4;
+                        String dots = ".".repeat(dotCount[0]);
+                        compileLabel.setText("Compiling" + dots);
+                });
+                dotTimer.start();
+
+                // Change to "Building..." after 1 second
+                Timer buildTimer = new Timer(1000, e -> {
+                        compileLabel.setText("Building...");
+                        dotTimer.stop();
+
+                        // Restart dot animation for building
+                        Timer buildDotTimer = new Timer(400, null);
+                        final int[] buildDotCount = { 0 };
+                        buildDotTimer.addActionListener(ev -> {
+                                buildDotCount[0] = (buildDotCount[0] + 1) % 4;
+                                String dots = ".".repeat(buildDotCount[0]);
+                                compileLabel.setText("Building" + dots);
+                        });
+                        buildDotTimer.start();
+
+                        // Stop after another second
+                        Timer stopTimer = new Timer(1000, ev -> buildDotTimer.stop());
+                        stopTimer.setRepeats(false);
+                        stopTimer.start();
+                });
+                buildTimer.setRepeats(false);
+                buildTimer.start();
+        }
+
+        private void hideCompilingAnimation() {
+                compileLabel.setVisible(false);
+        }
+
+        private void showCustomFeedback(boolean correct) {
+                // Load both feedback images
+                String firstImagePath = correct ? "src/img/Feedback/CorrectAnswer.png"
+                                : "src/img/Feedback/WrongAnswer.png";
+                String secondImagePath = correct ? "src/img/Feedback/CurrentScore.png" : "src/img/Feedback/YouFail.png";
+
+                ImageIcon firstIcon = new ImageIcon(firstImagePath);
+                ImageIcon secondIcon = new ImageIcon(secondImagePath);
+
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+                // Create overlay panel that covers everything
+                JPanel overlayPanel = new JPanel(null);
+                overlayPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+                overlayPanel.setOpaque(true);
+                overlayPanel.setBackground(Color.BLACK); // or match your background
+
+                // Labels for username and score
+                Player player = gameManager.getPlayer();
+                JLabel user = new JLabel(player.getUsername());
+                user.setForeground(new Color(255, 230, 66));
+                user.setHorizontalAlignment(JLabel.CENTER);
+                user.setVisible(false);
+
+                JLabel score = new JLabel(String.valueOf(player.getScore()));
+                score.setForeground(Color.WHITE);
+                score.setHorizontalAlignment(JLabel.CENTER);
+                score.setVisible(false);
+
+                overlayPanel.add(user);
+                overlayPanel.add(score);
+
+                // Setup buttons based on correct/incorrect
+                JButton mainButton = correct ? new JButton(MainBlue.getIcon()) : new JButton(MainRed.getIcon());
+                JButton playButton = correct ? new JButton(PlayBlue.getIcon()) : new JButton(PlayRed.getIcon());
+
+                mainButton.setBounds(662, 758, 595, 97);
+                mainButton.addActionListener(e -> {
+                        // Remove overlay first
+                        JLayeredPane layeredPane = topFrame.getLayeredPane();
+                        layeredPane.remove(overlayPanel);
+                        layeredPane.revalidate();
+                        layeredPane.repaint();
+
+                        GameState.resetGame();
+                        topFrame.setContentPane(new Menu());
+                        topFrame.revalidate();
+                        topFrame.repaint();
+                });
+
+                playButton.setBounds(662, 917, 595, 97);
+                playButton.addActionListener(e -> {
+                        // Remove overlay first
+                        JLayeredPane layeredPane = topFrame.getLayeredPane();
+                        layeredPane.remove(overlayPanel);
+                        layeredPane.revalidate();
+                        layeredPane.repaint();
+
+                        GameState.resetGame();
+                        topFrame.setContentPane(new PlayPanel());
+                        topFrame.revalidate();
+                        topFrame.repaint();
+                });
+
+                mainButton.setVisible(false);
+                playButton.setVisible(false);
+
+                overlayPanel.add(mainButton);
+                overlayPanel.add(playButton);
+
+                // Create label with the first image - center it
+                JLabel imageLabel = new JLabel(firstIcon);
+                int x = (screenSize.width - firstIcon.getIconWidth()) / 2;
+                int y = (screenSize.height - firstIcon.getIconHeight()) / 2;
+                imageLabel.setBounds(x, y, firstIcon.getIconWidth(), firstIcon.getIconHeight());
+                imageLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+                // Track which stage we're on
+                final boolean[] isFirstImage = { true };
+
+                // Add click listener to swap images
+                imageLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+                        @Override
+                        public void mouseClicked(java.awt.event.MouseEvent e) {
+                                if (isFirstImage[0]) {
+                                        // First click: swap to second image
+                                        imageLabel.setIcon(secondIcon);
+
+                                        // Show username and score
+                                        user.setVisible(true);
+                                        score.setVisible(true);
+
+                                        if (correct) {
+                                                // Correct answer layout
+                                                user.setBounds(730, 707, 387, 64);
+                                                user.setFont(new Font("Arial", Font.BOLD, 40));
+                                                score.setBounds(849, 846, 150, 57);
+                                                score.setFont(new Font("Arial", Font.BOLD, 35));
+                                        } else {
+                                                // Incorrect answer layout
+                                                user.setBounds(766, 540, 387, 63);
+                                                user.setFont(new Font("Arial", Font.BOLD, 45));
+                                                score.setBounds(858, 624, 203, 64);
+                                                score.setFont(new Font("Arial", Font.BOLD, 40));
+
+                                                // Show buttons (adjust positions)
+                                                mainButton.setBounds(662, 758, 595, 97);
+                                                playButton.setBounds(662, 917, 595, 97);
+                                                mainButton.setVisible(true);
+                                                playButton.setVisible(true);
+
+                                                // Check if this is final game over (AutoDebug was already used)
+                                                if (!gameManager.isDebugToolAvailable("AutoDebug") && !answeredWrong) {
+                                                        // This was a wrong answer after AutoDebug was used - game over
+                                                        // Buttons will handle navigation to menu/replay
+                                                }
+
+                                                // Disable clicking on image - only buttons should work
+                                                imageLabel.setCursor(
+                                                                new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                                                imageLabel.removeMouseListener(this);
+                                        }
+
+                                        overlayPanel.revalidate();
+                                        overlayPanel.repaint();
+
+                                        isFirstImage[0] = false;
+                                } else if (correct) {
+                                        // Second click (only for correct answers): transition to TopicsPanel
+                                        // Remove overlay first
+                                        JLayeredPane layeredPane = topFrame.getLayeredPane();
+                                        layeredPane.remove(overlayPanel);
+                                        layeredPane.revalidate();
+                                        layeredPane.repaint();
+
+                                        // Check game progress now (category switch or game end)
+                                        checkGameProgress();
+
+                                        // If didn't end game, go to TopicsPanel
+                                        if (questionsAnswered < TOTAL_QUESTIONS) {
+                                                topFrame.setContentPane(new TopicsPanel());
+                                                topFrame.revalidate();
+                                                topFrame.repaint();
+                                        }
+                                }
+                        }
+                });
+
+                overlayPanel.add(imageLabel);
+
+                // Add overlay on top of everything using JLayeredPane
+                JLayeredPane layeredPane = topFrame.getLayeredPane();
+                layeredPane.add(overlayPanel, JLayeredPane.POPUP_LAYER);
+
+                overlayPanel.revalidate();
+                overlayPanel.repaint();
         }
 
         private void highlightChoices(int selectedIndex, int correctIndex) {
@@ -747,25 +997,9 @@ public class GameScreen extends JPanel {
                                                 formatChoiceText(getChoicePrefix(i), currentChoiceTexts[i], "#00AA00"));
                 }
 
-                // ⭐ If they answered wrong, AutoDebug saves them by marking it as correct
-                if (answeredWrong && questionAnswered) {
-                        System.out.println("[GameScreen] AutoDebug SAVED the wrong answer! Marking as correct.");
-
-                        // Restore the points that were deducted (add back double the points: once to
-                        // undo deduction, once to add score)
-                        Player player = gameManager.getPlayer();
-                        if (player != null) {
-                                player.addScore(lastQuestionPoints * 2); // Undo deduction + add correct score
-                                player.incrementCorrect(); // Mark as correct
-                                updateScore(); // Update display
-                        }
-
-                        consecutiveCorrectAnswers++; // Add to consecutive correct since they used AutoDebug
-                        answeredWrong = false; // No longer wrong
-                        JOptionPane.showMessageDialog(this,
-                                        "Auto Debug Activated!\nYour wrong answer has been corrected!\nQuestion marked as CORRECT and points preserved!");
-                        checkGameProgress(); // Check if game progresses after this save
-                } else if (!questionAnswered) {
+                // AutoDebug now only reveals the correct answer (auto-save happens in
+                // submitAnswer)
+                if (!questionAnswered) {
                         JOptionPane.showMessageDialog(this,
                                         "Auto Debug activated!\nThe correct answer is highlighted.\nYou may now answer.");
                 } else {
