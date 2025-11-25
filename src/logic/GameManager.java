@@ -52,17 +52,23 @@ public class GameManager {
     // Load questions based on the loaded category
     public void loadQuestions() {
         availableQuestions.clear();
+
+        // Unified logic: both categories load 2 randomized questions per level.
+        // (Programming still distinguishes topics via JSON keys; mapping handled
+        // elsewhere.)
         for (int i = 1; i <= 5; i++) {
             List<Question> levelQuestions = questionBank.getQuestionsByLevel("L" + i, 2);
             availableQuestions.addAll(levelQuestions);
         }
-        // Log the selected questions for debugging/verification
+
+        // Log the selected questions for debugging/verification (topic + level)
         System.out.println("[GameManager] Selected questions (" + availableQuestions.size() + "):");
         int idx = 1;
         for (Question q : availableQuestions) {
             String text = q.getQuestionText();
             String preview = text.length() > 120 ? text.substring(0, 120) + "..." : text;
-            System.out.println(String.format("  %02d) [%s] %s - %s", idx++, q.getDifficulty(), q.getTopic(), preview));
+            System.out.println(
+                    String.format("  %02d) [Level=%s Topic=%s] %s", idx++, q.getDifficulty(), q.getTopic(), preview));
             System.out.println(q.getCorrectChoice());
         }
     }
@@ -146,6 +152,12 @@ public class GameManager {
     private String mapTopicPrefixToName(String prefix) {
         // Map topic codes to topic names
         switch (prefix) {
+            case "CTO":
+                return "code_to_output"; // programming.json key
+            case "OTC":
+                return "output_to_code"; // programming.json key
+            case "ML":
+                return "fill_in_blank"; // programming.json key
             case "Prod":
                 return "procedural";
             case "Func":

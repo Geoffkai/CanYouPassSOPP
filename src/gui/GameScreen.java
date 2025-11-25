@@ -41,8 +41,11 @@ public class GameScreen extends JPanel {
         private boolean refactorUsed;
         private List<Integer> refactorChoices;
         private DebugTools debugTools = new DebugTools();
-        private int questionsAnswered = 0;
+        private static int questionsAnswered = 0; // ⭐ STATIC so it persists across GameScreen instances
+        private static int consecutiveCorrectAnswers = 0; // ⭐ Track consecutive correct answers for winning condition
         private static final int TOTAL_QUESTIONS = 10;
+        private boolean answeredWrong = false; // Track if player answered wrong (can be saved by AutoDebug)
+        private int lastQuestionPoints = 0; // Store points from last question for AutoDebug restoration
         private JLabel choiceAText;
         private JLabel choiceBText;
         private JLabel choiceCText;
@@ -121,6 +124,9 @@ public class GameScreen extends JPanel {
                 questionAnswered = false;
                 refactorUsed = false;
 
+                // DEBUG: Log the current static counter when creating GameScreen
+                System.out.println("[GameScreen CONSTRUCTOR] questionsAnswered=" + questionsAnswered);
+
                 // Create question and score labels
                 questionLabel = new JTextPane();
                 questionLabel.setContentType("text/html");
@@ -194,6 +200,8 @@ public class GameScreen extends JPanel {
                 // Other Buttons
                 RetryBtn.setBounds(44, 64, 93, 93);
                 RetryBtn.addActionListener(e -> {
+                        questionsAnswered = 0; // Reset counter when restarting
+                        consecutiveCorrectAnswers = 0; // Reset consecutive correct answers
                         GameState.resetGame();
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                         topFrame.setContentPane(new PlayPanel());
@@ -204,6 +212,8 @@ public class GameScreen extends JPanel {
 
                 MenuBtn.setBounds(172, 64, 93, 93);
                 MenuBtn.addActionListener(e -> {
+                        questionsAnswered = 0; // Reset counter when going to menu
+                        consecutiveCorrectAnswers = 0; // Reset consecutive correct answers
                         GameState.resetGame();
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                         if (topFrame != null) {
@@ -216,7 +226,9 @@ public class GameScreen extends JPanel {
                 MuteBtn.addActionListener(e -> toggleMute());
 
                 display();
-                questionsAnswered = 0;
+                // Do NOT reset questionsAnswered here on every constructor call.
+                // It's already reset to 0 by checkGameProgress() when transitioning.
+                // This keeps the counter persistent across GameScreen instances.
                 // Load and display current question
                 loadCurrentQuestion();
 
@@ -337,6 +349,15 @@ public class GameScreen extends JPanel {
                         currentQuestion = gameManager.getQuestionByTopicCode(topicCode);
                 }
 
+                // If no topic was selected (e.g., after switching categories), fall back
+                // to the first available question so gameplay can continue immediately
+                if (currentQuestion == null) {
+                        List<Question> avail = gameManager.getAvailableQuestions();
+                        if (avail != null && !avail.isEmpty()) {
+                                currentQuestion = gameManager.getQuestionByIndex(0);
+                        }
+                }
+
                 if (currentQuestion != null) {
                         displayQuestion(currentQuestion);
                         updateScore();
@@ -424,60 +445,59 @@ public class GameScreen extends JPanel {
         }
 
         private void submitAnswer(int choiceIndex) {
-                if (currentQuestion == null || gameManager == null || questionAnswered) {
+                if (currentQuestion == null || gameManager == null || questionAnswered)
                         return;
-                }
-
                 questionAnswered = true;
                 questionsAnswered++;
 
+                System.out.println("[GameScreen] submitAnswer: questionsAnswered INCREMENTED to " + questionsAnswered);
+
+                // ⭐ Store points before submission (for AutoDebug restoration if needed)
+                lastQuestionPoints = currentQuestion.getDifficultyPoints();
+
                 boolean correct = gameManager.submitAnswer(choiceIndex);
 
-                // AUTO DEBUG SAVE FEATURE
-                if (!correct && autoDebugActive) {
-                        correct = true; // save the player
-                        autoDebugActive = false;
-
-                        // Force score update
-                        gameManager.getPlayer().incrementCorrect();
-                        gameManager.getPlayer().addScore(0); // you can adjust scoring rules
-
-                        JOptionPane.showMessageDialog(this, "Auto Debug saved you!");
-
-                        // Treat the answer as correct during highlight
-                }
-
-                // Mark the specific slot (e.g. "2a") used for the category so only that
-                // button is disabled next time. TopicsPanel sets the selected slot when
-                // opening the topic.
-                String catKey = GameState.getCategoryKey();
-                String slot = GameState.getSelectedSlotForCategory(catKey);
-                if (slot != null) {
-                        GameState.markSlotUsedForCategory(catKey, slot);
+                // ⭐ Track consecutive correct answers for winning condition
+                if (correct) {
+                        consecutiveCorrectAnswers++;
+                        System.out.println("[GameScreen] Consecutive correct answers: " + consecutiveCorrectAnswers);
+                        answeredWrong = false;
                 } else {
-                        // Fallback: mark topic code as used if slot information isn't available
-                        String topicCode = GameState.getTopic();
-                        if (topicCode != null) {
-                                GameState.markTopicUsedForCategory(catKey, topicCode);
+                        System.out.println("[GameScreen] WRONG ANSWER! Resetting consecutive counter from "
+                                        + consecutiveCorrectAnswers + " to 0");
+                        consecutiveCorrectAnswers = 0;
+                        answeredWrong = true; // Mark that they answered wrong (can be saved by AutoDebug)
+
+                        // ⭐ Check if AutoDebug is already used - if so, game over
+                        if (!gameManager.isDebugToolAvailable("AutoDebug")) {
+                                System.out.println("[GameScreen] GAME OVER! Wrong answer and AutoDebug already used!");
+                                highlightChoices(choiceIndex, currentQuestion.getCorrectChoice());
+                                disableAllChoiceButtons();
+                                JOptionPane.showMessageDialog(this,
+                                                "Wrong Answer! AutoDebug has already been used.\nGame Over!");
+                                endGame(false); // Player loses
+                                return;
                         }
                 }
 
-                // Highlight choices: selected choice colored, correct one green
+                // ⭐ Capture category BEFORE any switching, and mark slot as used
+                String originalCategory = GameState.getCategoryKey();
+                String slot = GameState.getSelectedSlotForCategory(originalCategory);
+
+                if (slot != null && questionsAnswered < TOTAL_QUESTIONS) {
+                        // Only mark the slot as used if we haven't finished all 10 questions yet.
+                        // After 10 questions, the category switches, so we don't want to mark
+                        // slots in the new category.
+                        GameState.markSlotUsedForCategory(originalCategory, slot);
+                }
+
                 highlightChoices(choiceIndex, currentQuestion.getCorrectChoice());
-
-                // Play sound effect (placeholder)
-                playSoundEffect(correct);
-
-                // Update UI after answer
                 updateScore();
                 disableAllChoiceButtons();
                 updateDebugToolButtons();
                 Return.setEnabled(true);
 
-                // Brief feedback
-                javax.swing.JOptionPane.showMessageDialog(this, correct ? "Correct!" : "Incorrect!");
-
-                // Check if game should end or continue
+                JOptionPane.showMessageDialog(this, correct ? "Correct!" : "Incorrect!");
                 checkGameProgress();
         }
 
@@ -521,53 +541,47 @@ public class GameScreen extends JPanel {
                 Player player = gameManager.getPlayer();
                 int correctCount = (player != null) ? player.getCorrectCount() : 0;
 
-                // Check if finished the current category
+                System.out.println("[GameScreen] checkGameProgress: questionsAnswered=" + questionsAnswered
+                                + ", TOTAL_QUESTIONS=" + TOTAL_QUESTIONS);
+
                 if (questionsAnswered >= TOTAL_QUESTIONS) {
+                        System.out.println("[GameScreen] ✓ Finished 10 questions");
 
-                        // Identify the next category
+                        // identify next category
                         QuestionBank.Category next = GameState.getNextCategory();
+                        System.out.println("[GameScreen] Current category: " + GameState.getCategory()
+                                        + ", Next category: " + next);
 
-                        // CASE 1 — There IS a next category
+                        // CASE 1 — next category exists (we finished category 1)
                         if (next != null && next != GameState.getCategory()) {
+                                System.out.println("[GameScreen] ✓ Finished category, moving to TopicsPanel");
 
-                                String finishedCatKey = GameState.getCategoryKey();
-                                GameState.clearCategoryState(finishedCatKey);
+                                // Notify player
+                                JOptionPane.showMessageDialog(this,
+                                                "You finished the " + GameState.getCategory().name() + " category!\n"
+                                                                + "Now proceeding to " + next.name() + "!");
 
-                                // Move to the next category
+                                // SWITCH category
                                 GameState.setCategory(next);
 
-                                // IMPORTANT FIX:
-                                // Clear next category before entering TopicsPanel
-                                // so all buttons are enabled again
-                                GameState.clearCategoryState(next.name());
-
-                                // Create a fresh GameManager for the new category
-                                QuestionBank bank = new QuestionBank();
-                                gameManager = new GameManager(bank, player);
-                                gameManager.initializeGame(next);
-                                GameState.setGameManager(gameManager);
-
-                                // Reset state
+                                // Reset counter for the new category
                                 questionsAnswered = 0;
                                 questionAnswered = false;
-                                refactorUsed = false;
-                                refactorChoices = null;
 
-                                JOptionPane.showMessageDialog(this,
-                                                "You finished the " + finishedCatKey + " category!\n"
-                                                                + "Proceeding to the next category...");
-
-                                // Go back to TopicsPanel
+                                // Go to TopicsPanel to let user choose a topic in the next category
                                 JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                                 topFrame.setContentPane(new TopicsPanel());
                                 topFrame.validate();
                                 topFrame.repaint();
-
                                 return;
                         }
 
-                        // CASE 2 — No next category → Game Over
-                        boolean won = (correctCount == TOTAL_QUESTIONS * 2);
+                        // CASE 2 — no next category, game ends
+                        // Player wins only if they answered all 20 questions consecutively correct (10
+                        // per category)
+                        boolean won = (consecutiveCorrectAnswers == TOTAL_QUESTIONS * 2);
+                        System.out.println("[GameScreen] Game Over! Consecutive correct: " + consecutiveCorrectAnswers
+                                        + ", Won: " + won);
                         endGame(won);
                 }
         }
@@ -710,7 +724,7 @@ public class GameScreen extends JPanel {
         }
 
         private void useAutoDebug() {
-                if (currentQuestion == null || gameManager == null || questionAnswered)
+                if (currentQuestion == null || gameManager == null)
                         return;
 
                 if (!gameManager.isDebugToolAvailable("AutoDebug")) {
@@ -733,8 +747,31 @@ public class GameScreen extends JPanel {
                                                 formatChoiceText(getChoicePrefix(i), currentChoiceTexts[i], "#00AA00"));
                 }
 
-                JOptionPane.showMessageDialog(this,
-                                "Auto Debug activated!\nThe correct answer is highlighted.\nYou may now answer.");
+                // ⭐ If they answered wrong, AutoDebug saves them by marking it as correct
+                if (answeredWrong && questionAnswered) {
+                        System.out.println("[GameScreen] AutoDebug SAVED the wrong answer! Marking as correct.");
+
+                        // Restore the points that were deducted (add back double the points: once to
+                        // undo deduction, once to add score)
+                        Player player = gameManager.getPlayer();
+                        if (player != null) {
+                                player.addScore(lastQuestionPoints * 2); // Undo deduction + add correct score
+                                player.incrementCorrect(); // Mark as correct
+                                updateScore(); // Update display
+                        }
+
+                        consecutiveCorrectAnswers++; // Add to consecutive correct since they used AutoDebug
+                        answeredWrong = false; // No longer wrong
+                        JOptionPane.showMessageDialog(this,
+                                        "Auto Debug Activated!\nYour wrong answer has been corrected!\nQuestion marked as CORRECT and points preserved!");
+                        checkGameProgress(); // Check if game progresses after this save
+                } else if (!questionAnswered) {
+                        JOptionPane.showMessageDialog(this,
+                                        "Auto Debug activated!\nThe correct answer is highlighted.\nYou may now answer.");
+                } else {
+                        JOptionPane.showMessageDialog(this,
+                                        "Auto Debug activated!\nThe correct answer is revealed.");
+                }
         }
 
         private void returnToTopics() {
@@ -745,7 +782,6 @@ public class GameScreen extends JPanel {
 
                 JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                 if (topFrame != null) {
-                        questionsAnswered = 0;
                         topFrame.setContentPane(new TopicsPanel());
                         topFrame.validate();
                         topFrame.repaint();
@@ -801,7 +837,8 @@ public class GameScreen extends JPanel {
                 Refactor.setEnabled(!usage.getOrDefault("Refactor", false) && !questionAnswered);
                 Console.setEnabled(!usage.getOrDefault("ConsoleLog", false) && !questionAnswered);
                 CtrlC.setEnabled(!usage.getOrDefault("CtrlC", false) && !questionAnswered);
-                AutoDebug.setEnabled(!usage.getOrDefault("AutoDebug", false) && !questionAnswered);
+                // ⭐ AutoDebug can be used even after wrong answer (as a life saver)
+                AutoDebug.setEnabled(!usage.getOrDefault("AutoDebug", false));
         }
 
         public void display() {

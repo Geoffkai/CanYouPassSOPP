@@ -81,4 +81,18 @@ public class QuestionBank {
         Collections.shuffle(result);
         return result.subList(0, Math.min(count, result.size()));
     }
+
+    // Programming-only helper: return ALL questions at a level without
+    // shuffling/limiting
+    // (used so we can pick specific topics deterministically for Programming
+    // category).
+    public List<Question> getAllQuestionsByLevel(String level) {
+        List<Question> result = new ArrayList<>();
+        for (Question q : activeQuestions) {
+            if (level.equals(q.getDifficulty())) {
+                result.add(q);
+            }
+        }
+        return result; // unshuffled full set
+    }
 }

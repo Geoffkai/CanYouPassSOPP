@@ -15,11 +15,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import static gui.GameState.selectedCategory;
 import logic.GameManager;
 import logic.Question;
 import logic.QuestionBank;
-
-import static gui.GameState.selectedCategory;
 
 public class TopicsPanel extends JPanel {
 
@@ -30,7 +29,7 @@ public class TopicsPanel extends JPanel {
 
     // Topic names — must match your image naming conventions
     String[] theoNames = { "EVDR", "Func", "Intro", "IVD", "MAP", "OOP", "Prod" };
-    String[] progNames = {"CTO", "OTC", "ML"};
+    String[] progNames = { "CTO", "OTC", "ML" };
     int maxLevel = 5;
 
     // Storage for icons
@@ -132,11 +131,11 @@ public class TopicsPanel extends JPanel {
 
     private void loadAllIcons() {
         if (selectedCategory == QuestionBank.Category.Programming) {
-            progNames = new String[]{"CTO", "OTC", "ML"};
+            progNames = new String[] { "CTO", "OTC", "ML" };
             // Load programming icons
             loadProgrammingIcons();
         } else {
-            theoNames = new String[]{"EVDR", "Func", "Intro", "IVD", "MAP", "OOP", "Prod"};
+            theoNames = new String[] { "EVDR", "Func", "Intro", "IVD", "MAP", "OOP", "Prod" };
             // Load theoretical icons
             loadTheoreticalIcons();
         }
@@ -305,6 +304,16 @@ public class TopicsPanel extends JPanel {
             return "Prod"; // default
         }
         String t = topicName.toLowerCase();
+        // Programming topic mappings (non-intrusive to theoretical)
+        if (t.contains("code_to_output")) {
+            return "CTO";
+        }
+        if (t.contains("output_to_code")) {
+            return "OTC";
+        }
+        if (t.contains("fill_in_blank") || t.contains("missing_line")) {
+            return "ML";
+        }
         if (t.contains("procedur") || t.contains("procedural")) {
             return "Prod";
         }
@@ -460,7 +469,7 @@ public class TopicsPanel extends JPanel {
             return;
         // Save currently-selected topic into GameState (scoped by category)
         String catKey = GameState.getCategoryKey();
-        GameState.setTopicForCategory(catKey, topicCode);
+        GameState.setTopic(topicCode);
         GameState.setTopicIconForCategory(catKey, icons.get(topicCode)); // optional store
         // Remember which slot (e.g. "2a") the player opened so we can mark that
         // specific slot as used after answering.

@@ -18,16 +18,14 @@ public class GameState {
     protected static QuestionBank.Category selectedCategory;
     private static GameManager gameManager;
     private static Question currentQuestion;
-    private static Map<String, Map<String, String>> savedTopicsByCategory = new HashMap<>();
+
     // savedTopicsByCategory: categoryKey -> (slot -> topicCode)
-    // e.g. "Theoretical" -> { "2a" -> "Prod2", "2b" -> "Func2", ... }
-
+    private static Map<String, Map<String, String>> savedTopicsByCategory = new HashMap<>();
+    // usedTopicsByCategory: categoryKey -> set of topicCodes used
     private static Map<String, java.util.Set<String>> usedTopicsByCategory = new HashMap<>();
-    // e.g. "Theoretical" -> {"Prod2", "Func2"}
+    // usedSlotsByCategory: categoryKey -> set of slot ids used (e.g., "2a")
     private static Map<String, java.util.Set<String>> usedSlotsByCategory = new HashMap<>();
-    // e.g. "Theoretical" -> {"2a", "3b"}
-
-    // Track which slot was selected when opening GameScreen for a category
+    // selectedSlotForCategory: categoryKey -> slot (the slot player opened)
     private static Map<String, String> selectedSlotForCategory = new HashMap<>();
 
     private static final ImageIcon Geoff = new ImageIcon(
@@ -53,16 +51,13 @@ public class GameState {
     }
 
     public static void resetGame() {
-
         selectedCharacter = null;
         selectedLevel = null;
         selectedTopic = null;
         selectedCategory = null;
-
         currentPlayer = null;
         currentQuestion = null;
         gameManager = null;
-
         topicIcon = null;
 
         savedTopicsByCategory.clear();
@@ -103,11 +98,11 @@ public class GameState {
     }
 
     // --- Current Question ---
-    public static void setQuestion(Question q) { // <-- add setter
+    public static void setQuestion(Question q) {
         currentQuestion = q;
     }
 
-    public static Question getQuestion() { // <-- add getter
+    public static Question getQuestion() {
         return currentQuestion;
     }
 
@@ -140,19 +135,18 @@ public class GameState {
 
     // --- Character icons ---
     public static ImageIcon getCharacterIcon(String characterName) {
-        if ("Geoff".equals(characterName)) {
+        if ("Geoff".equals(characterName))
             return Geoff;
-        } else if ("Yvonne".equals(characterName)) {
+        else if ("Yvonne".equals(characterName))
             return Yvonne;
-        } else if ("Anon".equals(characterName)) {
+        else if ("Anon".equals(characterName))
             return Anon;
-        } else if ("Elmer".equals(characterName)) {
+        else if ("Elmer".equals(characterName))
             return Elmer;
-        } else if ("Merry".equals(characterName)) {
+        else if ("Merry".equals(characterName))
             return Merry;
-        } else {
+        else
             return null;
-        }
     }
 
     public static String getCategoryKey() {
@@ -175,16 +169,10 @@ public class GameState {
         return (m == null) ? null : m.get(slot);
     }
 
-    public static void setTopicForCategory(String categoryKey, String topicCode) {
-        // also keep a simple "current topic" if you already have
-        // GameState.setTopic(topic)
-        setTopic(topicCode); // keep backwards compatibility
-    }
-
     // Optional: store icon for topic per category if you want (kept for
     // compatibility)
     public static void setTopicIconForCategory(String categoryKey, javax.swing.ImageIcon icon) {
-        setTopicIcon(icon); // reuse your existing GameState method if present
+        setTopicIcon(icon);
     }
 
     // Used-topic methods
@@ -209,9 +197,7 @@ public class GameState {
     }
 
     public static void setSelectedSlotForCategory(String categoryKey, String slot) {
-        if (categoryKey == null)
-            return;
-        if (slot == null)
+        if (categoryKey == null || slot == null)
             return;
         selectedSlotForCategory.put(categoryKey, slot);
     }
@@ -225,29 +211,25 @@ public class GameState {
     public static void clearAllSavedTopicsAndUsed() {
         savedTopicsByCategory.clear();
         usedTopicsByCategory.clear();
+        usedSlotsByCategory.clear();
+        selectedSlotForCategory.clear();
     }
 
+    // Next-category logic (two categories)
     public static QuestionBank.Category getNextCategory() {
-        // If current is Theoretical and it is finished → go to Programming
         if (selectedCategory == QuestionBank.Category.Theoretical) {
             return QuestionBank.Category.Programming;
         }
-
-        // If current is Programming and it is finished → go to Theoretical
         if (selectedCategory == QuestionBank.Category.Programming) {
             return QuestionBank.Category.Theoretical;
         }
-
-        return null; // nothing else
+        return null;
     }
 
-    public static void clearCategoryState(String categoryKey) {
-        if (categoryKey == null)
-            return;
-
-        savedTopicsByCategory.remove(categoryKey);
-        usedTopicsByCategory.remove(categoryKey);
+    // === SAFE reset: clear only the slot usage (do NOT remove saved layout/icons)
+    public static void resetSlotUsageForCategory(String categoryKey) {
         usedSlotsByCategory.remove(categoryKey);
+        usedTopicsByCategory.remove(categoryKey);
         selectedSlotForCategory.remove(categoryKey);
     }
 }
