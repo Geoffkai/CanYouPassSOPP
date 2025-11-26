@@ -1,5 +1,7 @@
 package gui;
 
+import gui.audio.SoundManager;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -14,9 +16,19 @@ import javax.swing.JFrame;
 public class GUIMain {
     public static void main(String[] args) {
         System.setProperty("sun.java2d.uiScale", "1.0");
+
+        // Start background music
+        SoundManager.playBackgroundMusic("src/gui/audio/background_music.wav");
+
         JFrame frame = new JFrame("Game Splash Screen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setUndecorated(true);
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                SoundManager.stopBackgroundMusic();
+            }
+        });
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(screenSize.width, screenSize.height);

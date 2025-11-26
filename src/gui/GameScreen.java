@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import gui.audio.SoundManager;
 import logic.GameManager;
 import logic.Player;
 import logic.Question;
@@ -598,6 +599,12 @@ public class GameScreen extends JPanel {
                                 : "src/img/Feedback/WrongAnswer.png";
                 String secondImagePath = correct ? "src/img/Feedback/CurrentScore.png" : "src/img/Feedback/YouFail.png";
 
+                if (correct) {
+                        SoundManager.playSoundEffect("src/gui/audio/correct.wav");
+                } else {
+                        SoundManager.playSoundEffect("src/gui/audio/incorrect.wav");
+                }
+
                 ImageIcon firstIcon = new ImageIcon(firstImagePath);
                 ImageIcon secondIcon = new ImageIcon(secondImagePath);
 
@@ -914,7 +921,7 @@ public class GameScreen extends JPanel {
 
                 JLabel score = new JLabel(String.valueOf(player.getScore()));
                 score.setForeground(Color.WHITE);
-                user.setFont(new Font("Arial", Font.BOLD, 40));
+                score.setFont(new Font("Arial", Font.BOLD, 40));
                 score.setBounds(858, 624, 203, 64);
                 score.setHorizontalAlignment(JLabel.CENTER);
                 score.setVisible(true);
@@ -1162,8 +1169,20 @@ public class GameScreen extends JPanel {
         }
 
         private void toggleMute() {
-                // TODO: Implement mute functionality with SoundManager
-                JOptionPane.showMessageDialog(this, "Mute functionality - Toggle sound on/off");
+                boolean muted = SoundManager.toggleMute();
+
+                // Optional: Change button icon based on mute state
+                if (muted) {
+                        // Show "unmute" icon
+                        ImageIcon UnmuteIcon = new ImageIcon(
+                                new ImageIcon("src/img/Buttons/Unmute.png")
+                                        .getImage()
+                                        .getScaledInstance(93, 93, java.awt.Image.SCALE_SMOOTH));
+                        MuteBtn.setIcon(UnmuteIcon);
+                } else {
+                        // Show "mute" icon
+                        MuteBtn.setIcon(Mute);
+                }
         }
 
         private void enableAllChoiceButtons() {
