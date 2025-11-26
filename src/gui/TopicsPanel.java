@@ -71,18 +71,24 @@ public class TopicsPanel extends JPanel {
 
         // Ensure there is a GameManager available in GameState for the chosen category
         gm = GameState.getGameManager();
+        QuestionBank.Category cat = GameState.getCategory();
+
         if (gm == null) {
             logic.QuestionBank bank = new logic.QuestionBank();
             logic.Player player = GameState.getPlayer();
             gm = new logic.GameManager(bank, player);
             // initialize using selected category if present
-            QuestionBank.Category cat = GameState.getCategory();
             if (cat != null) {
                 gm.initializeGame(cat);
             } else {
                 gm.initializeGame(QuestionBank.Category.Theoretical);
             }
             GameState.setGameManager(gm);
+        } else if (gm.getCategory() != cat) {
+            // Category changed! Need to reinitialize with new questions
+            System.out.println("[TopicsPanel] Category changed from " + gm.getCategory() + " to " + cat
+                    + " - reinitializing questions");
+            gm.initializeGame(cat);
         }
 
         // Group questions by level from GameManager (questions are already loaded for
