@@ -35,7 +35,7 @@
 - **🎵 Immersive Audio Experience**
   - Background music to keep you focused
   - Sound effects for correct and incorrect answers
-  - Full audio control with volume management
+  - Full audio control with mute/unmute management
 
 - **🏆 Score Tracking System**
   - Real-time score calculation
@@ -106,7 +106,6 @@
 
 - ✅ **Correct Answer**: Earn points and boost your score
 - ❌ **Incorrect Answer**: Learn from mistakes with detailed feedback
-- ⏱️ **Time Bonus**: Answer quickly for bonus points
 - 🏆 **Level Completion**: Unlock achievements and new challenges
 
 ---
@@ -183,11 +182,7 @@ This project includes two submission packages:
 
 ## 👥 Contributors
 
-- **Anon** - The mysterious programmer
-- **Elmer** - The debugging expert
-- **Geoff** - The architecture enthusiast
-- **Merry** - The testing specialist
-- **Yvonne** - The documentation guru
+- Merry Grace T. Potot (@micxzie)
 
 ---
 
@@ -209,8 +204,6 @@ This project is part of the CMSC 13 Machine Problem coursework.
 
 **🎓 Ready to test your programming knowledge? Let's get started! 🚀**
 
-[Download Latest Release](../../releases) | [Report Bug](../../issues) | [Request Feature](../../issues)
-
-Made with 💻 by CMSC 13 Students
+Made with 💻 by CMSC 13 Merry and Geoff
 
 </div>
