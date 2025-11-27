@@ -92,9 +92,6 @@ public class GameScreen extends JPanel {
                         new ImageIcon("src/img/Debug Tools/AuDeb.png").getImage().getScaledInstance(324, 50,
                                         java.awt.Image.SCALE_SMOOTH));
         JButton AutoDebug = new JButton(AuDeb);
-        ImageIcon Ret = new ImageIcon(new ImageIcon("src/img/Debug Tools/Ret.png").getImage().getScaledInstance(324, 50,
-                        java.awt.Image.SCALE_SMOOTH));
-        JButton Return = new JButton(Ret);
 
         // Other Buttons
         ImageIcon Menu = new ImageIcon(new ImageIcon("src/img/Buttons/Menu.png").getImage().getScaledInstance(93, 93,
@@ -212,10 +209,6 @@ public class GameScreen extends JPanel {
                 AutoDebug.setBounds(1531, 892, 324, 50);
                 AutoDebug.addActionListener(e -> useAutoDebug());
 
-                Return.setBounds(1531, 966, 324, 50);
-                Return.addActionListener(e -> returnToTopics());
-                Return.setEnabled(false);
-
                 // Other Buttons
                 RetryBtn.setBounds(44, 64, 93, 93);
                 RetryBtn.addActionListener(e -> {
@@ -266,7 +259,7 @@ public class GameScreen extends JPanel {
                 add(Console);
                 add(CtrlC);
                 add(AutoDebug);
-                add(Return);
+
                 add(RetryBtn);
                 add(MenuBtn);
                 add(MuteBtn);
@@ -532,7 +525,9 @@ public class GameScreen extends JPanel {
                 updateScore();
                 disableAllChoiceButtons();
                 updateDebugToolButtons();
-                Return.setEnabled(true);
+
+                // Disable AutoDebug after answering
+                AutoDebug.setEnabled(false);
 
                 // Show compiling animation
                 showCompilingAnimation();
@@ -541,7 +536,7 @@ public class GameScreen extends JPanel {
                 final boolean finalCorrect = correct;
 
                 // Add 3 second delay before showing feedback panel
-                Timer feedbackTimer = new Timer(0, e -> {
+                Timer feedbackTimer = new Timer(3000, e -> {
                         hideCompilingAnimation();
                         showCustomFeedback(finalCorrect);
                         // Check game progress after feedback is shown (will be triggered by feedback
@@ -814,13 +809,13 @@ public class GameScreen extends JPanel {
 
                                 showCategoryCompletionOverlay(next);
                         }
-                }else if(questionsAnswered == TOTAL_QUESTIONS && consecutiveCorrectAnswers == TOTAL_QUESTIONS){
+                } else if (questionsAnswered == TOTAL_QUESTIONS && consecutiveCorrectAnswers == TOTAL_QUESTIONS) {
                         // CASE 2 — no next category, game ends
                         // Player wins only if they answered all 20 questions consecutively correct (10
                         // per category)
                         boolean won = true;
                         System.out.println("[GameScreen] Game Over! Consecutive correct: " + consecutiveCorrectAnswers
-                                + ", Won: " + won);
+                                        + ", Won: " + won);
                         endGame();
                 }
         }
@@ -925,7 +920,6 @@ public class GameScreen extends JPanel {
                 score.setBounds(858, 624, 203, 64);
                 score.setHorizontalAlignment(JLabel.CENTER);
                 score.setVisible(true);
-
 
                 // Create Play Again button
                 JButton playAgainButton;
@@ -1175,9 +1169,9 @@ public class GameScreen extends JPanel {
                 if (muted) {
                         // Show "unmute" icon
                         ImageIcon UnmuteIcon = new ImageIcon(
-                                new ImageIcon("src/img/Buttons/Unmute.png")
-                                        .getImage()
-                                        .getScaledInstance(93, 93, java.awt.Image.SCALE_SMOOTH));
+                                        new ImageIcon("src/img/Buttons/Unmute.png")
+                                                        .getImage()
+                                                        .getScaledInstance(93, 93, java.awt.Image.SCALE_SMOOTH));
                         MuteBtn.setIcon(UnmuteIcon);
                 } else {
                         // Show "mute" icon

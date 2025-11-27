@@ -1,0 +1,83 @@
+package gui;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+public class PlayPanel extends JPanel {
+    BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/InitialImg/ClickableClassmates.png");
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+    public PlayPanel() {
+        setLayout(null);
+        setBounds(0, 0, screenSize.width, screenSize.height);
+        backgroundPanel.setBounds(0, 0, screenSize.width, screenSize.height);
+        backgroundPanel.setLayout(null);
+
+        String[] names = { "Geoff", "Yvonne", "Anon", "Elmer", "Merry" };
+        int[][] bounds = {
+                { 68, 220, 318, 586 }, // Geoff
+                { 434, 409, 318, 586 }, // Yvonne
+                { 799, 233, 318, 586 }, // Anon
+                { 1166, 405, 318, 586 }, // Elmer
+                { 1528, 227, 318, 586 } // Merry
+        };
+
+        for (int i = 0; i < names.length; i++) {
+            JPanel character = new JPanel();
+            character.setBounds(bounds[i][0], bounds[i][1], bounds[i][2], bounds[i][3]);
+            character.setOpaque(false);
+
+            final String name = names[i];
+            character.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(character);
+
+                    switch (name) {
+                        case "Geoff":
+                            topFrame.setContentPane(new CategoryPanel());
+                            JOptionPane.showMessageDialog(null, "You clicked on Geoff!");
+                            GameState.setCharacter("Geoff");
+                            break;
+                        case "Yvonne":
+                            topFrame.setContentPane(new CategoryPanel());
+                            JOptionPane.showMessageDialog(null, "You clicked on Yvonne!");
+                            GameState.setCharacter("Yvonne");
+                            break;
+                        case "Anon":
+                            topFrame.setContentPane(new CategoryPanel());
+                            JOptionPane.showMessageDialog(null, "You clicked on Anon!");
+                            GameState.setCharacter("Anon");
+                            break;
+                        case "Elmer":
+                            topFrame.setContentPane(new CategoryPanel());
+                            JOptionPane.showMessageDialog(null, "You clicked on Elmer!");
+                            GameState.setCharacter("Elmer");
+                            break;
+                        case "Merry":
+                            topFrame.setContentPane(new CategoryPanel());
+                            JOptionPane.showMessageDialog(null, "You clicked on Merry!");
+                            GameState.setCharacter("Merry");
+                            break;
+                    }
+                    topFrame.validate();
+                    topFrame.repaint();
+                }
+            });
+
+            backgroundPanel.add(character);
+        }
+
+        add(backgroundPanel);
+
+        validate();
+        repaint();
+    }
+}
