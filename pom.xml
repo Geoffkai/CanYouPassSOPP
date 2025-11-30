@@ -31,6 +31,7 @@
                 <directory>src</directory>
                 <includes>
                     <include>**/*.json</include>
+                    <include>**/*.txt</include>
                     <include>**/*.png</include>
                     <include>**/*.jpg</include>
                     <include>**/*.wav</include>

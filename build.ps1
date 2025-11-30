@@ -24,4 +24,9 @@ if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 } else {
     Write-Output "Compilation succeeded. Classes are in target\classes"
+    # Ensure runtime data files are available on the classpath / next to classes
+    if (Test-Path .\school_records.txt) {
+        Copy-Item -Path .\school_records.txt -Destination target\classes -Force
+        Write-Output "Copied school_records.txt to target\classes"
+    }
 }

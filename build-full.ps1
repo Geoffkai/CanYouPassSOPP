@@ -64,6 +64,9 @@ Write-Host "Compiled successfully" -ForegroundColor Green
 Write-Host "[4/5] Copying resources..." -ForegroundColor Yellow
 Copy-Item -Path "src\img" -Destination "out\img" -Recurse -Force
 Copy-Item -Path "*.json" -Destination "out\" -Force
+if (Test-Path "school_records.txt") {
+    Copy-Item -Path "school_records.txt" -Destination "out\" -Force
+}
 if (Test-Path "src\gui\audio") {
     New-Item -ItemType Directory -Path "out\gui\audio" -Force | Out-Null
     Copy-Item -Path "src\gui\audio\*" -Destination "out\gui\audio\" -Recurse -Force -ErrorAction SilentlyContinue
